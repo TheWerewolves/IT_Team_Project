@@ -21,10 +21,13 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&kbyk&c9(htny0e)b6!#pk&fpfv@-%-u(3a*nn4xiq9_8dukcj'
+key = None
+with open('secret.key') as f:
+    key = f.read().strip()
 
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = key
+
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -58,7 +61,7 @@ ROOT_URLCONF = 'IT_Team_Project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATE_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -67,6 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'gamers_havn.context_processors.base',
             ],
         },
     },

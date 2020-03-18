@@ -1,0 +1,46 @@
+
+.niceText{
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+
+.MyTop li,button{
+    margin: 5px 5px 5px 0px;
+}
+
+.basePortrait{
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.MyBottom{
+    background-color: red;
+
+}
+
+.MyBottom{
+
+    background-color: rgb(50, 50, 50);
+}
+
+.MyBottom a{
+
+    display: block;
+    height: 50px;
+    margin: 0px auto;
+    line-height: 50px;
+    text-align: center;
+}
+
+.MyBottom a:hover{
+    background-color: gray;
+    text-decoration: none;
+    color: white;
+}
+
+.switchable{
+    margin-bottom: 50px;
+}

@@ -1,0 +1,88 @@
+.jumbotron-fluid{
+    background-color: rgb(100, 100, 100, 0.5);
+}
+
+.carouselArticle{
+    background-color: rgb(200, 200, 200, 0.2);
+}
+
+.carouselExtend{
+
+    position: absolute;
+    z-index: 10;
+    bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #fff;
+    text-align: center;
+
+
+}
+
+
+.carouselTop{
+    top: 10%;
+    right: 10%;
+    left: 50%;
+    padding: 10px;
+}
+
+.carouselTop .carouselArticle{
+    margin: 20px;
+    padding: 10px;
+}
+
+.carouselMid{
+    left: 20%;
+    right: 20%;
+    padding: 10px;
+}
+
+.TitleBlock{
+        background-color: rgb(100, 100, 100, 0.5);
+        height: 60px; 
+        width: 230px; 
+        margin: 20px auto;
+        display: inline-block;
+        line-height: 60px;
+        text-align: center;
+        font-size: large;
+        font-weight: bolder;
+        border: gray 1px solid;
+}
+
+.indexCardSet{
+    margin: 0px auto;
+}
+
+.card{
+    background-color: lightgray;
+    padding-top: 20px;
+}
+
+.TitleFont a{
+    font-size: large;
+    font-weight: bolder;
+    text-align: center;
+    word-wrap: break-word;
+    text-decoration: none;
+    color: black;
+    margin: 0px auto;
+}
+
+.TitleFont a:hover{
+    color: white;
+    border: darkgray 10px inset;
+    background-color: darkgray;
+}
+
+.jumbotron{
+    margin: 0px auto 0px;
+    background-color: darkgray;
+}
+
+#mostPopArtTitle, #mostPopGames{
+    margin: 20px auto 0px;
+}
+
+

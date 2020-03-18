@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load gamers_havn_template_tags %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="Team AI">
+        <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+        <title>
+            Gamers' Havn - {% block title_block %}Post contents for your favorite games!{% endblock %}
+        </title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="{% static 'css/base.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/profile.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/about.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}" rel="stylesheet">
+        <!-- <link rel="stylesheet" href="{% static 'css/login.css' %}" rel="stylesheet"> -->
+        <link rel="stylesheet" href="{% static 'css/signup.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/article.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/normalize.css' %}" rel="stylesheet">
+        
+        <!-- JS, Popper.js, and jQuery -->
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <!-- Icons -->
+        <script src="https://unpkg.com/feather-icons"></script>
+
+    </head>
+
+    <body>
+        <!-- Header -->
+        <header>
+            <nav  class="navbar navbar-expand-lg navbar-dark bg-dark MyTop">
+                <a class="navbar-brand" href="{% url 'gamers_havn:index' %}">
+                    <img src="{% static 'images/brand.png' %}" alt="" height="50px">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span> 
+                </button>
+            
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        {% get_game_list %}
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'gamers_havn:about' %}">About</a>
+                        </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav ml-auto">
+                        <form class="form-inline my-2 my-lg-0">
+                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        </form>
+
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img class="basePortrait" src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="User Portrait"></a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'gamers_havn:profile' user.username %}">Profile</a>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li><form action="{% url 'gamers_havn:signup' %}">
+                                <button class="nav-item btn btn-secondary" type="submit"> Signup </button>
+                            </form></li>
+                            <li><form action="{% url 'gamers_havn:login' %}">
+                                <button class="nav-item btn btn-secondary"> Login </button>
+                            </form></li>
+                        {% endif %}
+                    </ul>
+                    
+                </div>
+            </nav>
+        </header>
+        
+        <!-- Main -->
+        <main role="main" class="ml-sm-auto">
+            {% block body_block %}{% endblock %}
+
+            <!-- FOOTER -->
+            <footer class="container-fluid MyBottom">
+                <div class="row">
+                    <a href="{% url 'gamers_havn:index' %}" class="footerA col-3 niceText" >Home</a>
+                    <a href="{% url 'gamers_havn:about' %}" class="footerA col-3 niceText">About</a>
+                    <a href="" class="footerA col-3 niceText">Technical Support</a>
+                    <a href="#" class="footerA col-3 niceText">Back To Top</a>
+                </div>
+            </footer>
+        </main>
+    </body>
+</html>

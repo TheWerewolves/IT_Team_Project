@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- base css (nav) -->
+    <link rel="stylesheet" href="css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/profile.css" rel="stylesheet">
+
+
+    <!-- JQ and Bootstrap JS -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js" ></script>
+
+    <!-- extra icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+</head>
+<body>
+     
+    <nav  class="navbar navbar-expand-lg navbar-dark bg-dark MyTop">
+        <a class="navbar-brand" href="#">
+            <img src="img/brand.png" alt="" height="50px">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span> 
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Games</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">LOL</a>
+                    </div>
+                </li>
+
+                
+            </ul>
+            
+            <ul class="navbar-nav ml-auto">
+                <form class="form-inline my-2 my-lg-0">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                </form>
+                <li>
+                    <button class="nav-item btn btn-secondary"> Signup </button>
+                </li>
+                <li>
+                    <button class="nav-item btn btn-secondary"> Login </button>
+                </li>
+            </ul>
+            
+        </div>
+    </nav>
+
+    <div class="switchable container">
+        <div class="jumbotron">
+            <h1 class="display-4">Personal Profile</h1>
+            <p class="lead">change your personal infomation and check your articles and likes</p>
+            <hr class="my-4">
+
+        </div>
+
+        <div class="row ml-auto">
+            
+            <div class="list-group col-md-3 col-sm-12">
+                <a id="pi" href="#" class="list-group-item list-group-item list-group-item-action">Personal Infomation</a>
+                <a id="ma" href="#" class="list-group-item list-group-item list-group-item-action">My Articles</a>
+                <a id="fa" href="#" class="list-group-item list-group-item list-group-item-action">Favorite Articles</a>
+                <a id="fg" href="#" class="list-group-item list-group-item list-group-item-action">Favorite Games</a>
+            </div>
+
+    
+            <div class="rightProfile card col-md-9 col-sm-12">
+                <form>
+                    <h2>My Articles</h2>    
+                    <hr>     
+                    <div class="list-group my-2">
+
+                        <!-- Each page can read at most 5 articles ! use loop here -->
+                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1 nameOfArticle">My article 1</h5>
+                                <small class="dateOfArticle">2019.10.1</small>
+                            </div>
+                            <!-- These class also used in the article.html -->
+                            <small class="text-muted">View: <small class="numOfViews">12</small> Likes: <small class="numOfViews">12</small></small>
+                          
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                            
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">My article 2</h5>
+                                <small>2019.10.1</small>
+                            </div>
+                            <!-- These class also used in the article.html -->
+                            <small class="text-muted">View: <small class="numOfViews">12</small> Likes: <small class="numOfViews">12</small></small>
+                          
+                        </a>
+
+                      </div>
+                </form>
+
+
+                <ul class="pagination pagination-lg my-2">
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                </ul>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="MyBottom container-fluid fixed-bottom">
+        <div class="row">
+
+            <a href="" class="footerA col-3 niceText" >Home</a>
+            <a href="" class="footerA col-3 niceText">About</a>
+            <a href="" class="footerA col-3 niceText">Technical Support</a>
+        </div>
+
+    </div>
+</body>
+</html>

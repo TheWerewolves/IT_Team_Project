@@ -1,0 +1,72 @@
+{% extends 'gamers_havn/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ game.title }}
+{% endblock %}
+
+
+{% block body_block %}
+    <div class="switchable container">
+        <div class="jumbotron">
+            <h1 class="display-4">Personal Profile</h1>
+            <p class="lead">change your personal infomation and check your articles and likes</p>
+            <hr class="my-4">
+
+        </div>
+
+        <div class="row ml-auto">
+            
+            <div class="list-group col-md-3 col-sm-12">
+                <a href="#" class="list-group-item list-group-item-action">Personal Infomation</a>
+                <a href="#" class="list-group-item list-group-item-action">My Articles</a>
+                <a href="#" class="list-group-item list-group-item-action">Favorite Articles</a>
+                <a href="#" class="list-group-item list-group-item-action">Favorite Games</a>
+            </div>
+
+            <div class="rightProfile card col-md-9 col-sm-12">
+                <form>
+                                        
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div class="col-4"></div>
+                            <img src="img/p1.PNG" alt="" class="col-4">
+                            <div class="col-4"></div>
+                        </div>
+                        
+                        <!-- name -->
+                        <div class="form-group">
+                            <div >
+                                <label for="inputName ">User Name</label>
+                                <input id="inputName" type="text" class="form-control" readonly="true" value="Benny">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div >
+                                <label for="inputAge ">Age</label>
+                                <input id="inputName" type="text" class="form-control" readonly="true" value="24">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="inputName">Email Address</label>
+                            <input id="inputName" type="email" class="form-control" readonly="true" value="1234567890@gmail.com">
+                        </div>
+
+
+                        <div class="form-row d-flex">
+                            <div class="col-2"></div>
+                            <button type="submit" class="btn btn-secondary col-3">Edit Profile</button>
+                            <div class="col-2"></div>
+                            <button type="submit" class="btn btn-secondary col-3">Change Portrait</button>
+                            <div class="col-2"></div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

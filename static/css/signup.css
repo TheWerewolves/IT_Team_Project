@@ -1,0 +1,9 @@
+.LogFrame{
+            
+    height:100vh;
+    background-color: rgb(34, 34, 34, 0.9);
+}
+
+.LogFrame button{
+    width: 185px;
+}
