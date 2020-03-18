@@ -1,75 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
 
-    <!-- Bootstrap css -->
-    <link rel="stylesheet" href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- base css (nav) -->
-    <link rel="stylesheet" href="css/base.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/article.css" rel="stylesheet">
-
-    <!-- JQ and Bootstrap JS -->
-    <script src="js/jquery-3.4.1.min.js"></script>
-    <script src="js/bootstrap.min.js" ></script>
-
-    <!-- extra icons -->
-    <script src="https://unpkg.com/feather-icons"></script>
-
-</head>
-<body >
-     
-    <nav  class="navbar navbar-expand-lg navbar-dark bg-dark MyTop">
-
-        <a class="navbar-brand" href="#">
-            <img src="img/brand.png" alt="" height="50px">
-        </a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span> 
-        </button>
-    
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Games</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">LOL</a>
-                    </div>
-                </li>
-
-            </ul>
-            
-            <ul class="navbar-nav ml-auto">
-                <form class="form-inline my-2 my-lg-0">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                </form>
-                <li>
-                    <button class="nav-item btn btn-secondary"> Signup </button>
-                </li>
-                <li>
-                    <button class="nav-item btn btn-secondary"> Login </button>
-                </li>
-            </ul>
-            
-        </div>
-    </nav>
-
-    <div class="switchable" >
+    <div id="">
         <div id="articleDiv" class="container card">
             <div class="row">
     
@@ -130,7 +60,6 @@
                     <hr>
     
                     <div class="ArticleInfoDiv card-subtitle row d-flex content-justify-between">
-    
                         <div id="tagDiv col-md-7 col-sm-12">
                             <button class="btn btn-light"><i data-feather="tag"></i>  add Tags</button>
                             <div id="articleTagsDiv">
@@ -147,20 +76,19 @@
                         <script>feather.replace()</script>
     
                     </div>
+
                     <hr>
-    
+
                 </div>
             </div>
         </div>
     
         <div class="CommentDiv container">
             <div class="row card">
-    
                 <div class="CommentImg col-md-1 col-sm-3">
                     <img alt="image" src="img/p1.PNG" >
                 </div>
                 
-    
                 <div class="CommentArea col-md-9  col-sm-7">
                     <textarea name="" id="" maxlength="150" placeholder="Please write your comments to the article"></textarea>
                 </div>
@@ -173,12 +101,10 @@
     
         <div id="showCommentDiv" class="CommentDiv container">
             <div class="row card d-flex">
-    
                 <div class="CommentImg col-md-1 col-sm-3">
                     <img alt="image" src="img/p1.PNG" >
                 </div>
                 
-    
                 <div class="CommentArea col-md-9  col-sm-7">
                     <span class="commentName">Benny</span>:
                     <p>This is what we want!!This is what we want!!This is what we want!!This is what we want!!This is what we want!!This is what we want!!This is what we want!!This is what we want!!This is what we want!!</p>
@@ -187,10 +113,8 @@
                 <div class="col-md-2 col-sm-2 IndexOfCommentDiv">
 
                 </div>
-    
             </div>
         </div>
-    
     </div>
 
 
@@ -213,15 +137,3 @@
             </p>
         </div>
     </div> -->
-
-    <div class="MyBottom container-fluid fixed-bottom">
-        <div class="row">
-
-            <a href="" class="footerA col-3 niceText" >Home</a>
-            <a href="" class="footerA col-3 niceText">About</a>
-            <a href="" class="footerA col-3 niceText">Technical Support</a>
-        </div>
-
-    </div>
-</body>
-</html>

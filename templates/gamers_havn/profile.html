@@ -18,10 +18,10 @@
         <div class="row ml-auto">
             
             <div class="list-group col-md-3 col-sm-12">
-                <a href="#" class="list-group-item list-group-item-action">Personal Infomation</a>
-                <a href="#" class="list-group-item list-group-item-action">My Articles</a>
-                <a href="#" class="list-group-item list-group-item-action">Favorite Articles</a>
-                <a href="#" class="list-group-item list-group-item-action">Favorite Games</a>
+                <a href="{% url 'gamers_havn:profile' user.username %}" class="list-group-item list-group-item-action">Personal Infomation</a>
+                <a href="{% url 'gamers_havn:my_articles' %}" class="list-group-item list-group-item-action">My Articles</a>
+                <a href="{% url 'gamers_havn:index' %}" class="list-group-item list-group-item-action">Favorite Articles</a>
+                <a href="{% url 'gamers_havn:index' %}" class="list-group-item list-group-item-action">Favorite Games</a>
             </div>
 
             <div class="rightProfile card col-md-9 col-sm-12">

@@ -15,7 +15,7 @@ urlpatterns = [
      path('login/', views.LoginView.as_view(), name='login'),
      path('profile/<username>/', views.ProfileView.as_view(), name='profile'),
      path('goto/', views.GotoArticleView.as_view(), name='goto_article'),
-     # path('profiles/', views.ListProfilesView.as_view(), name='list_profiles'),
+     path('my_articles/<username>/', views.MyArticlesView.as_view(), name='my_articles'),
     #  path('add_category/', views.AddCategoryView.as_view(), name='add_category'),
     #  path('category/<slug:category_name_slug>/add_page/', views.AddPageView.as_view(), 
     #       name='add_page'),

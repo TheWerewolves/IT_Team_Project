@@ -156,6 +156,11 @@ class ProfileView(View):
         
     #     return render(request, 'gamers_havn/game.html', context_dict)
 
+class MyArticlesView(View):
+    def get(request):
+
+        return render(request, 'gamers_havn/my_articles.html')
+
 
 # Helper functions
 def visitor_cookie_handler(request):
