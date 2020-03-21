@@ -9,8 +9,8 @@
 {% block body_block %}
     <div class="container">
         <div class="jumbotron">
-            <h1 class="display-4">Favorite Articles</h1>
-            <p class="lead">Articles favorited by {{ user_profile.user.username }}</p>
+            <h1 class="display-4">Followed Games</h1>
+            <p class="lead">Games that {{ user_profile.user.username }} followed</p>
             <hr class="my-4">
         </div>
 
@@ -21,12 +21,12 @@
                 <a href="{% url 'gamers_havn:change_password' user_profile.user.username %}" class="list-group-item list-group-item-action">Change Password</a>
             {% endif %}
                 <a href="{% url 'gamers_havn:created_articles' user_profile.user.username %}" class="list-group-item list-group-item-action">Created Articles</a>
-                <a href="{% url 'gamers_havn:favorite_articles' user_profile.user.username %}" class="list-group-item list-group-item-action bg-primary text-light">Favorite Articles</a>
-                <a href="{% url 'gamers_havn:followed_games' user_profile.user.username %}" class="list-group-item list-group-item-action">Followed Games</a>
+                <a href="{% url 'gamers_havn:favorite_articles' user_profile.user.username %}" class="list-group-item list-group-item-action">Favorite Articles</a>
+                <a href="{% url 'gamers_havn:followed_games' user_profile.user.username %}" class="list-group-item list-group-item-action bg-primary text-light">Followed Games</a>
             </div>
 
             <div class="rightProfile col-md-9 col-sm-12">
-            {% include 'gamers_havn/article_list.html' %}
+            {% include 'gamers_havn/game_list.html' %}
             </div>
         </div>
     </div>

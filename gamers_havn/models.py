@@ -75,11 +75,10 @@ class Comment(models.Model):
     CONTENT_MAX_LENGTH = 256
 
     content = models.CharField(max_length=CONTENT_MAX_LENGTH)
-    date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now, editable=False)
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{author}'s comment about {article}"
+        return f"{self.author}'s comment about {self.article}"
 
-        

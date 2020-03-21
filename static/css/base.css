@@ -9,13 +9,6 @@
     margin: 5px 5px 5px 0px;
 }
 
-.basePortrait{
-    width: 40px;
-    height: 40px;
-    padding: 0px;
-    margin: 0px;
-}
-
 .MyBottom{
     background-color: red;
 
@@ -41,6 +34,21 @@
     color: white;
 }
 
-.switchable{
-    margin-bottom: 50px;
+.basePortrait{
+    width: 30px;
+    height: 30px;
+    padding: 0px;
+    margin: 0px;
+    border-radius:50%;
+};
+
+/* set the text of portrait to the center */
+.baseProtrait .basePortraitUserName{
+    font: 700 white 24px; 
+    line-height: 50px;
+}
+
+/* remove the small arrow on the dropdown for portrait */
+#portraitDropDown .dropdown-toggle::after {
+    display:none;
 }

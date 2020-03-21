@@ -1,0 +1,29 @@
+{% load staticfiles %}
+
+<form>
+    <div >
+        <h2 class="py-4 px-4 my-1 mx-1" >Users</h2>
+    </div>
+
+    <div class="list-group my-2">
+    {% for u in users %}
+        <a href="{% url 'gamers_havn:profile' u.user.username %}" class="list-group-item list-group-item-action flex-colume align-items-start">
+            <div class="d-flex-colume w-100 ">
+                <div class="d-flex-row">
+                {% if u.portrait %}
+                    <img class="basePortrait" src="{{ MEDIA_URL }}{{ u.portrait }}" alt="{{ u.user.username }}'s profile image" height="30px" width="30px">
+                {% else %}
+                    <img class="basePortrait" src="{% static 'images/user_default.png' %}" alt="User portrait" height="30px" width="30px">
+                {% endif %}
+                    <span class="mx-2">{{ u.user.username }}</span>
+                </div>
+                
+                <small class="my-2">Email Address：{{ u.user.email }}</small>
+            </div> 
+        </a>
+    {% empty %}
+        <strong>No users here!</strong>
+    {% endfor %}
+    </div>
+</form>
+    

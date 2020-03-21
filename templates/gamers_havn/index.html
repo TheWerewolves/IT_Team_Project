@@ -27,31 +27,27 @@
 
             <div id="carouselExampleControls" class="carousel slide container-fluid" data-ride="carousel">
                 <div class="carousel-inner">
-                    {% for article in popular_articles %}
-                        <a class="carousel-item {% cycle 'active' '' '' %}" href="{% url 'gamers_havn:goto_article' %}?article_id={{ article.id }}">
-                            <img class="d-block w-100" src="{% static 'images/l1.jpg' %}" alt="{% cycle 'First' 'Second' 'Third' %} slide">
+                {% for article in popular_articles %}
+                    <a class="carousel-item {% cycle 'active' '' '' %}" href="{% url 'gamers_havn:goto_article' %}?article_id={{ article.id }}">
+                        <img class="d-block w-100" src="{% static 'images/bg/' %}{% cycle 'slide-1.jpg' 'slide-2.png' 'slide-3.png' %}" alt="{% cycle 'First' 'Second' 'Third' %} slide">
 
-                            <div class="carouselArticle carousel-caption d-block d-sm-none">
-                                <h5 class="nameOfArticle">This is the title of the article {{ forloop.counter }} </h5>
+                        <div class="carouselTop carouselExtend d-none d-md-block">
+                            <div class="carouselArticle">
+                                <h5 class="nameOfArticle"> {{ article.title }} </h5>
+                            </div>
+                            
+                            <div class="carouselArticle">
+                                <h5 class="authorOfArticle"> {{ article.author }} </h3>
                             </div>
 
-                            <div class="carouselTop carouselExtend d-none d-md-block">
-                                <div class="carouselArticle">
-                                    <h5 class="nameOfArticle">This is the title of the article {{ forloop.counter }} </h5>
-                                </div>
-                                
-                                <div class="carouselArticle">
-                                    <h5 class="authorOfArticle">This is the author of article {{ forloop.counter }} </h3>
-                                </div>
-
-                                <div class="carouselArticle">
-                                    <p class="descripOfArticle">This is the first sentence of the article This is the first sentence of the article This is the first sentence of the article This is the first sentence of the article This is the first sentence of the article</p>
-                                </div>
+                            <div class="carouselArticle">
+                                <p class="descripOfArticle"> {{ article.title }} </p>
                             </div>
-                        </a>
-                    {% endfor %}
+                        </div>
+                    </a>
+                {% endfor %}
                 </div>
-
+    
                 <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="sr-only">Previous</span>
@@ -68,35 +64,15 @@
             <div class="container">
                 <h1 class="display-4" style="text-align:center">Most Popular Games</h1><br><br>
                 <div class="row justify-content-center TitleFont">
-
-                    <div class="col-md-2 col-sm-0 "></div>
-
-                    <a class="card col-md-2 col-sm-12" href="" >
-                        <img src="{% static 'images/g1.png' %}" class="card-img-top" alt="...">
+                {% for game in popular_games %}
+                    <div class="col-md-1 col-sm-0 "></div>
+                    <a class="card col-md-3 col-sm-12" href="{% url 'gamers_havn:game' game.slug %}" >
+                        <img src="{% static 'images/games/' %}{{ game.slug }}.png" class="card-img-top" alt="{{ game.slug }}.png">
                         <div class="card-body">
-                            <span>LOL</span>
+                            <span class="word-wrap">{{ game.title }}</span>
                         </div>
                     </a>
-
-                    <div class="col-md-1 col-sm-0"></div>
-
-                    <a class="card col-md-2 col-sm-12" href="" >
-                        <img src="{% static 'images/g2.png' %}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <span>SC2</span>
-                        </div>
-                    </a>
-
-                    <div class="col-md-1 col-sm-0"></div>
-
-                    <a class="card col-md-2 col-sm-12" href="" >
-                        <img src="{% static 'images/g3.png' %}" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <span>MHW</span>
-                        </div>
-                    </a>
-
-                    <div class="col-md-2 col-sm-0"></div>
+                {% endfor %}
                 </div>
             </div>
         </div>

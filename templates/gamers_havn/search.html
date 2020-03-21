@@ -1,0 +1,31 @@
+{% extends 'gamers_havn/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ game.title }}
+{% endblock %}
+
+
+{% block body_block %}
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Search Result for: "{{ search_query }}"</h1>
+            <p class="lead"></p>
+            <hr class="my-4">
+        </div>
+
+        <div class="row mt-4">
+            <div class="rightProfile card col-md-12 col-sm-12 my-auto">
+            {% if articles %}
+                {% include 'gamers_havn/article_list.html' %}
+            {% elif games %}
+                {% include 'gamers_havn/game_list.html' %}
+            {% elif users %}
+                {% include 'gamers_havn/user_list.html' %}
+            {% else %}
+                <strong>Nothing here!</strong>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

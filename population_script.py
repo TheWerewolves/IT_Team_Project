@@ -18,14 +18,14 @@ def populate():
     accounts = [
         {
             'user': {
-                'username': 'yuuto', 'password': 'password',
+                'username': 'yuuto', 'password': 'pw000000',
                 'email': 'yuuto@mymail.com',
             },
             'age': 15, 'portrait': f'profile_images/Golurk.png'
         },
         {
             'user': {
-                'username': 'benny', 'password': 'password',
+                'username': 'benny', 'password': 'pw000000',
                 'email': 'benny@mymail.com',
             },
             'age': 16, 'portrait': f'profile_images/Golurk.png'

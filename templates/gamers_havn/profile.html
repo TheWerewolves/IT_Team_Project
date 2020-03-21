@@ -7,63 +7,71 @@
 
 
 {% block body_block %}
-    <div class="switchable container">
+    <div class="container">
         <div class="jumbotron">
             <h1 class="display-4">Personal Profile</h1>
-            <p class="lead">change your personal infomation and check your articles and likes</p>
+            <p class="lead">Check {{ user_profile.user.username }}'s personal infomation</p>
             <hr class="my-4">
-
         </div>
 
-        <div class="row ml-auto">
-            
+        <div class="row ml-auto mt-4">
             <div class="list-group col-md-3 col-sm-12">
-                <a href="{% url 'gamers_havn:profile' user.username %}" class="list-group-item list-group-item-action">Personal Infomation</a>
-                <a href="{% url 'gamers_havn:my_articles' %}" class="list-group-item list-group-item-action">My Articles</a>
-                <a href="{% url 'gamers_havn:index' %}" class="list-group-item list-group-item-action">Favorite Articles</a>
-                <a href="{% url 'gamers_havn:index' %}" class="list-group-item list-group-item-action">Favorite Games</a>
+                <a href="{% url 'gamers_havn:profile' user_profile.user.username %}" class="list-group-item list-group-item-action bg-primary text-light">Personal Infomation</a>
+            {% if user.username == user_profile.user.username %}
+                <a href="{% url 'gamers_havn:change_password' user_profile.user.username %}" class="list-group-item list-group-item-action">Change Password</a>
+            {% endif %}
+                <a href="{% url 'gamers_havn:created_articles' user_profile.user.username %}" class="list-group-item list-group-item-action">Created Articles</a>
+                <a href="{% url 'gamers_havn:favorite_articles' user_profile.user.username %}" class="list-group-item list-group-item-action">Favorite Articles</a>
+                <a href="{% url 'gamers_havn:followed_games' user_profile.user.username %}" class="list-group-item list-group-item-action">Followed Games</a>
             </div>
 
-            <div class="rightProfile card col-md-9 col-sm-12">
-                <form>
-                                        
+            <div class="rightProfile col-md-9 col-sm-12">
+                <form id="edit_profile_form" method="post" action=".">
+                {% csrf_token %}
                     <div class="form-group">
                         <div class="form-row">
                             <div class="col-4"></div>
-                            <img src="img/p1.PNG" alt="" class="col-4">
+                            {% if user_profile.portrait %}
+                                <img class="col-4" src="{{ MEDIA_URL }}{{ user_profile.portrait }}" alt="{{ user_profile.user.username }}'s profile image">
+                            {% else %}
+                                <img class="col-4" src="{% static 'images/user_default.png' %}" alt="User portrait">
+                            {% endif %}
                             <div class="col-4"></div>
                         </div>
                         
-                        <!-- name -->
                         <div class="form-group">
                             <div >
                                 <label for="inputName ">User Name</label>
-                                <input id="inputName" type="text" class="form-control" readonly="true" value="Benny">
+                                <input id="input_change_name" name="username" type="text" class="form-control" readonly="true" value="{{ user_profile.user.username }}">
                             </div>
-
                         </div>
 
                         <div class="form-group">
                             <div >
                                 <label for="inputAge ">Age</label>
-                                <input id="inputName" type="text" class="form-control" readonly="true" value="24">
+                                <input id="input_change_age" name="age" type="number" class="form-control" readonly="true" value="{{ user_profile.age }}">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="inputName">Email Address</label>
-                            <input id="inputName" type="email" class="form-control" readonly="true" value="1234567890@gmail.com">
+                            <input id="input_change_email" name="email" type="email" class="form-control" readonly="true" value="{{ user_profile.user.email }}">
                         </div>
 
-
+                    {% if user.username == user_profile.user.username %}
                         <div class="form-row d-flex">
                             <div class="col-2"></div>
-                            <button type="submit" class="btn btn-secondary col-3">Edit Profile</button>
+                            <button id="edit_profile_btn" class="btn btn-secondary col-3">Edit Profile</button>
                             <div class="col-2"></div>
-                            <button type="submit" class="btn btn-secondary col-3">Change Portrait</button>
+                            <button id="change_portrait_btn" class="btn btn-secondary col-3">Change Portrait</button>
                             <div class="col-2"></div>
                         </div>
-
+                    {% endif %}
+                    {% if changed_name %}
+                        <div class="form-row d-flex">
+                            <label class="text-danger mx-auto">Someone has taken the name '{{ changed_name }}', please try again.</label>
+                        </div>
+                    {% endif %}
                     </div>
                 </form>
             </div>

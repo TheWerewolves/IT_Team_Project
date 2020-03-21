@@ -1,7 +1,11 @@
 from datetime import datetime
 
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
+
+from django.db.models import Q
 
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -52,9 +56,40 @@ class ShowGameView(View):
         return render(request, 'gamers_havn/game.html', context_dict)
     
 class ShowArticleView(View):
-    def get(request):
+    def get(self, request, article_title_slug):
+        try:
+            article = Article.objects.get(slug=article_title_slug)
+            article.content = article.content.read().decode('ansi')
+            comments = Comment.objects.filter(article=article)
+        except Article.DoesNotExist:
+            article = None
+            comments = None
 
-        return render(request, 'gamers_havn/article.html')
+        context_dict = {}
+        context_dict['article'] = article
+        context_dict['comments'] = comments
+
+        return render(request, 'gamers_havn/article.html', context_dict)
+
+    @method_decorator(login_required)
+    def post(self, request, article_title_slug):
+        comment = request.POST['comment']
+
+class LikeArticleView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        category_id = request.GET['category_id']
+        try:
+            category = Category.objects.get(id=int(category_id))
+        except Category.DoesNotExist:
+            return HttpResponse(-1)
+        except ValueError:
+            return HttpResponse(-1)
+
+        category.likes += 1
+        category.save()
+
+        return HttpResponse(category.likes)
 
 class GotoArticleView(View):
     def get(self, request):
@@ -66,100 +101,180 @@ class GotoArticleView(View):
         article.views += 1
         article.save()
 
-        return redirect(reverse('gamers_havn:article', kwargs={'category_name_slug': article_name_slug}))
+        return redirect(reverse('gamers_havn:article', kwargs={'article_title_slug': article.slug}))
 
 class SignupView(View):
     def get(self, request):
-        form = UserProfileForm()
-        context_dict = {'form': form}
+        user_list = User.objects.all().values_list('username', flat=True)
+        context_dict = {'user_list': user_list}
         return render(request, 'gamers_havn/signup.html', context_dict)
-    
-    # @method_decorator(login_required)
-    # def post(self, request):
-    #     form = UserProfileForm(request.POST, request.FILES)
 
-    #     if form.is_valid():
-    #         user_profile = form.save(commit=False)
-    #         user_profile.user = request.user
-    #         user_profile.save()
-
-    #         return redirect(reverse('gamers_havn:index'))
-    #     else:
-    #         print(form.errors)
-        
-    #     context_dict = {'form': form}
-    #     return render(request, 'gamers_havn/.html', context_dict)
-
-class LoginView(View):
-    def get(self, request):
-        form = UserProfileForm()
-        context_dict = {'form': form}
-        return render(request, 'gamers_havn/login.html', context_dict)
-
-class ProfileView(View):
-    def get_user_details(self, username):
+    def post(self, request):
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
-            return None
+            user = User.objects.create_user(username, email, password)
+            account = Account(user=user)
+            login(request, user)
+            return redirect(reverse('gamers_havn:profile', kwargs={'username': user.username}))
+
+        context_dict = {}
+        context_dict['username'] = username
+        context_dict['email'] = email
+        context_dict['password'] = password
+        return render(request, 'gamers_havn/signup.html', context_dict)
+
+class LoginView(View):
+    def get(self, request):
+        return render(request, 'gamers_havn/login.html')
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(reverse('gamers_havn:index'))
         
-        user_profile = Account.objects.get_or_create(user=user)[0]
-        form = UserProfileForm({'age': user_profile.age,
-                                'portrait': user_profile.portrait})
-        
-        return (user, user_profile, form)
-    
+        context_dict = {}
+        context_dict['username'] = username
+        context_dict['password'] = password
+        return render(request, 'gamers_havn/login.html', context_dict)
+
+class LogoutView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        logout(request)
+        return redirect(reverse('gamers_havn:index'))
+
+class ProfileView(View):
     @method_decorator(login_required)
     def get(self, request, username):
         try:
-            (user, user_profile, form) = self.get_user_details(username)
+            user_profile = get_user_details(username)
         except TypeError:
-            return redirect(reverse('rango:index'))
-        
-        context_dict = {'user_profile': user_profile,
-                        'selected_user': user,
-                        'form': form}
-        
-        return render(request, 'gamers_havn/profile.html', context_dict)
+            return redirect(reverse('gamers_havn/index.html'))
+
+        return render(request, 'gamers_havn/profile.html', {'user_profile': user_profile})
     
     @method_decorator(login_required)
     def post(self, request, username):
+        username = request.POST['username']
+        email = request.POST['email']
+        age = request.POST['age']
         try:
-            (user, user_profile, form) = self.get_user_details(username)
+            user_profile = get_user_details(username)
         except TypeError:
             return redirect(reverse('gamers_havn:index'))
-        
-        form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
 
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect(reverse('gamers_havn:profile',
-                                    kwargs={'username': username}))
+        if user_profile.user.username == username or len(User.objects.filter(username=username)) == 0:
+            user_profile.user.username = username
+            user_profile.user.email = email
+            user_profile.age = age
+            user_profile.save()
+            return redirect(reverse('gamers_havn:profile', kwargs={'username': username}))
+
+        return render(request, 'gamers_havn/profile.html', {'user_profile': user_profile, 'changed_name': username})
+
+class ChangePasswordView(View):
+    @method_decorator(login_required)
+    def get(self, request, username):
+        try:
+            user_profile = get_user_details(username)
+        except TypeError:
+            return redirect(reverse('gamers_havn/index.html'))
+
+        return render(request, 'gamers_havn/change_password.html', {'user_profile': user_profile})
+
+    @method_decorator(login_required)
+    def post(self, request, username):
+        old_password = request.POST['old_password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
+        try:
+            user_profile = get_user_details(username)
+            user = user_profile.user
+        except TypeError:
+            return redirect(reverse('gamers_havn:index'))
+
+        change_pw_message = ''
+        if check_password(old_password, user.password):
+            if new_password == confirm_password:
+                user.password = make_password(new_password)
+                user.save()
+                login(user, request)
+                return redirect(reverse('gamers_havn:index'))
+            else:
+                change_pw_message = 'The confirmation did not match, Please try again.'
         else:
-            print(form.errors)
+            change_pw_message = 'Old password is incorrect, Please try again.'
         
-        context_dict = {'user_profile': user_profile,
-                        'selected_user': user,
-                        'form': form}
-        
-        return render(request, 'gamers_havn/profile.html', context_dict)
+        context_dict = {}
+        context_dict['user_profile'] = user_profile
+        context_dict['change_pw_message'] = change_pw_message
 
+        return render(request, 'gamers_havn/change_password.html', context_dict)
 
-    # @method_decorator(login_required)
-    # def post(self, request, game_title_slug):
-    #     context_dict = self.create_context_dict(game_title_slug)
-    #     query = request.POST['query'].strip()
+class CreatedArticlesView(View):
+    def get(self, request, username):
+        try:
+            user_profile = get_user_details(username)
+        except TypeError:
+            return redirect(reverse('gamers_havn/index.html'))
+        article_list = Article.objects.filter(author__user__username=username)
+        context_dict = {}
+        context_dict['user_profile'] = user_profile
+        context_dict['articles'] = article_list
+        return render(request, 'gamers_havn/created_articles.html', context_dict)
 
-    #     if query:
-    #         context_dict['query'] = query
-    #         context_dict['result_list'] = run_query(query)
-        
-    #     return render(request, 'gamers_havn/game.html', context_dict)
+class FavoriteArticlesView(View):
+    def get(self, request, username):
+        try:
+            user_profile = get_user_details(username)
+            article_list = user_profile.favorite_articles.all()
+        except TypeError:
+            return redirect(reverse('gamers_havn/index.html'))
+        context_dict = {}
+        context_dict['user_profile'] = user_profile
+        context_dict['articles'] = article_list
+        return render(request, 'gamers_havn/favorite_articles.html', context_dict)
 
-class MyArticlesView(View):
-    def get(request):
+class FollowedGamesView(View):
+    def get(self, request, username):
+        try:
+            user_profile = get_user_details(username)
+            game_list = user_profile.followed_games.all()
+            for game in game_list:
+                game.articles = Article.objects.filter(game__title=game.title).count()
+        except TypeError:
+            return redirect(reverse('gamers_havn/index.html'))
+        context_dict = {}
+        context_dict['user_profile'] = user_profile
+        context_dict['games'] = game_list
+        return render(request, 'gamers_havn/followed_games.html', context_dict)
 
-        return render(request, 'gamers_havn/my_articles.html')
+class SearchView(View):
+    def get(self, request):
+        return render(request, 'gamers_havn/search.html')
+
+    def post(self, request):
+        search_query = request.POST['search_query']
+        search_type = request.POST['search_type']
+        context_dict = {}
+
+        if search_type == 'Articles':
+            context_dict['articles'] = get_article_list(max_result=0, query=search_query)
+        elif search_type == 'Games':
+            context_dict['games'] = get_game_list(max_result=0, query=search_query)
+        elif search_type == 'Users':
+            context_dict['users'] = get_user_list(max_result=0, query=search_query)
+
+        context_dict['search_query'] = search_query
+
+        return render(request, 'gamers_havn/search.html', context_dict)
 
 
 # Helper functions
@@ -185,4 +300,48 @@ def get_server_side_cookie(request, cookie, default_val=None):
         val = default_val
     return val
 
-# def get_game_list()
+def get_article_list(max_result=0, query=''):
+    article_list = []
+    if len(query) > 0:
+        article_list = Article.objects.filter(
+            Q(title__icontains=query) | Q(author__user__username__icontains=query) | Q(game__title__icontains=query)
+        )
+    else:
+        article_list = Article.objects.all()
+    if max_result > 0:
+        if len(article_list) > max_result:
+            article_list = article_list[:max_result]
+    return article_list
+
+def get_game_list(max_result=0, query=''):
+    game_list = []
+    if len(query) > 0:
+        game_list = Game.objects.filter(title__icontains=query)
+    else:
+        game_list = Game.objects.all()
+
+    for game in game_list:
+            game.articles = Article.objects.filter(game__title=game.title).count()
+            
+    if max_result > 0:
+        if len(game_list) > max_result:
+            game_list = game_list[:max_result]
+    return game_list
+
+def get_user_list(max_result=0, query=''):
+    user_list = []
+    if len(query) > 0:
+        user_list = Account.objects.filter(user__username__icontains=query)
+    else:
+        user_list = Account.objects.all()
+    if max_result > 0:
+        if len(user_list) > max_result:
+            user_list = user_list[:max_result]
+    return user_list
+
+def get_user_details(username):
+    try:
+        user_profile = Account.objects.get(user__username=username)
+    except Account.DoesNotExist:
+        return None
+    return user_profile

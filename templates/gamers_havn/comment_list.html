@@ -1,0 +1,30 @@
+{% load staticfiles %}
+
+<form>
+    <div>
+        <h2 class="py-4 px-4 my-1 mx-1" >Comments</h2>
+    </div>
+    
+    <div class="list-group my-2">
+    {% for comment in comments %}
+        <div class="CommentImg col-md-1 col-sm-3">
+        {% if comment.author.portrait %}
+            <img src="{{ MEDIA_URL }}{{ comment.author.portrait }}" alt="{{ comment.author }}'s profile image" height="30px" width="30px">
+        {% else %}
+            <img src="{% static 'images/user_default.png' %}" alt="User portrait" height="30px" width="30px">
+        {% endif %}
+        </div>
+        
+        <div class="CommentArea col-md-9  col-sm-7">
+            <span class="commentName">{{ comment.author }}</span>:
+            <p>{{ comment.content }}</p>
+        </div>
+    
+        <div class="col-md-2 col-sm-2 IndexOfCommentDiv">
+    
+        </div>
+    {% empty %}
+        <strong>No comments here!</strong>
+    {% endfor %}
+    </div>
+</form>

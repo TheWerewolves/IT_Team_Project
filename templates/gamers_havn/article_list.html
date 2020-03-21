@@ -1,0 +1,26 @@
+<form>
+    <div >
+        <h2 class="py-4 px-4 my-1 mx-1" >Articles</h2>
+    </div>
+
+    <div class="list-group my-2">
+    {% for article in articles %}
+        <a href="{% url 'gamers_havn:goto_article' %}?article_id={{ article.id }}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ article.title }}</h5>
+                <small class="dateOfArticle">Created at {{ article.created_at }}</small>
+            </div>
+
+            <small class="text-muted">
+                Author: <small class="authorOfArticles">{{ article.author }}</small> 
+                <br>
+                View: <small class="numOfViews">{{ article.views }}</small> 
+                Likes: <small class="numOfViews">{{ article.likes }}</small>
+            </small>
+        </a>
+    {% empty %}
+        <strong>No articles here!</strong>
+    {% endfor %}
+    </div>
+</form>
+    

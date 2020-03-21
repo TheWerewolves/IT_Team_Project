@@ -1,0 +1,36 @@
+{% load staticfiles %}
+
+<form>
+    <div >
+        <h2 class="py-4 px-4 my-1 mx-1" >Games</h2>
+    </div>
+
+    <div class="list-group my-2">
+    {% for game in games %}
+        <a href="{% url 'gamers_havn:game' game.slug %}" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 py-2" >
+                <div>
+                    <img src="{% static 'images/games/' %}{{ game.slug }}.png" class="rounded-sm" height="100px" width="100px">
+                </div>
+                <div class="w-100 row"  >
+                    <div class="col-11 mx-auto px-4" >
+                        <h2>{{ game.title }}</h2>
+                    </div>
+                    <div class="my-2 col-11 mx-auto w-100 d-flex justify-content-right h-25 row" >
+                        <div class="text-secondary col-md-6 col-sm-12" >
+                            <span class="text-secondary">articles: {{ game.articles }}</span>
+                        </div>
+
+                        <div class="text-secondary col-md-6 col-sm-12">
+                            <span >followers: {{ game.follows }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+    {% empty %}
+        <strong>No games here!</strong>
+    {% endfor %}
+    </div>
+</form>
+    

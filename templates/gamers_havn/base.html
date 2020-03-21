@@ -19,22 +19,12 @@
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/base.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/profile.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/about.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/index.css' %}" rel="stylesheet">
         <!-- <link rel="stylesheet" href="{% static 'css/login.css' %}" rel="stylesheet"> -->
         <link rel="stylesheet" href="{% static 'css/signup.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/article.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/normalize.css' %}" rel="stylesheet">
-        
-        <!-- JS, Popper.js, and jQuery -->
-        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-        <!-- Icons -->
-        <script src="https://unpkg.com/feather-icons"></script>
-
+        <link rel="stylesheet" href="{% static 'css/profile.css' %}" rel="stylesheet">
     </head>
 
     <body>
@@ -51,38 +41,63 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         {% get_game_list %}
-                        
                         <li class="nav-item">
                             <a class="nav-link" href="#">Contact</a>
                         </li>
-    
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'gamers_havn:about' %}">About</a>
                         </li>
                     </ul>
                     
                     <ul class="navbar-nav ml-auto">
-                        <form class="form-inline my-2 my-lg-0">
-                            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <form method="post" action="{% url 'gamers_havn:search' %}" class="form-inline my-2 my-lg-0 pr-5">
+                            {% csrf_token %}
+                            <input id="search_input" class="form-control mr-sm-2" type="search" name="search_query" placeholder="Search" aria-label="Search">
+                            <button id="search_btn" class="btn btn-secondary my-2 my-sm-0" type="submit">Search for</button>
+                            <div class="dropdown">
+                            {% if games %}
+                                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">Games</button>
+                                <input type="hidden" value="Games" name="search_type">
+                            {% elif users %}
+                                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">User</button>
+                                <input type="hidden" value="User" name="search_type">
+                            {% else %}
+                                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">Articles</button>
+                                <input type="hidden" value="Articles" name="search_type">
+                            {% endif %}
+                                <div id="search_type_dropdown" class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">Articles</a>
+                                    <a class="dropdown-item" href="#">Games</a>
+                                    <a class="dropdown-item" href="#">Users</a>
+                                </div>
+                            </div>
                         </form>
 
-                        {% if user.is_authenticated %}
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img class="basePortrait" src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="User Portrait"></a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{% url 'gamers_havn:profile' user.username %}">Profile</a>
-                                </div>
-                            </li>
-                        {% else %}
-                            <li><form action="{% url 'gamers_havn:signup' %}">
-                                <button class="nav-item btn btn-secondary" type="submit"> Signup </button>
-                            </form></li>
-                            <li><form action="{% url 'gamers_havn:login' %}">
-                                <button class="nav-item btn btn-secondary"> Login </button>
-                            </form></li>
-                        {% endif %}
+                    {% if user.is_authenticated %}
+                        <li id="portraitDropDown" class="nav-item dropdown">
+                            <button class="btn btn-secondary dropdown-toggle d-flex justify-content-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if current_account.portrait %}
+                                <img class="basePortrait" src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ user.username }}'s profile image">
+                            {% else %}
+                                <img class="basePortrait" src="{% static 'images/user_default.png' %}" alt="User portrait">
+                            {% endif %}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" >
+                                <h6 class="dropdown-header">Sign in as : <br><span class="font-weight-bold">{{ user.username }}</span> </h6>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'gamers_havn:profile' user.username %}">Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'gamers_havn:logout' %}">Log out</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li><form action="{% url 'gamers_havn:signup' %}">
+                            <button class="nav-item btn btn-secondary" type="submit"> Signup </button>
+                        </form></li>
+                        <li><form action="{% url 'gamers_havn:login' %}">
+                            <button class="nav-item btn btn-secondary"> Login </button>
+                        </form></li>
+                    {% endif %}
                     </ul>
                     
                 </div>
@@ -91,7 +106,9 @@
         
         <!-- Main -->
         <main role="main" class="ml-sm-auto">
-            {% block body_block %}{% endblock %}
+            <div class="min-vh-100">
+                {% block body_block %}{% endblock %}
+            </div>
 
             <!-- FOOTER -->
             <footer class="container-fluid MyBottom">
@@ -103,5 +120,19 @@
                 </div>
             </footer>
         </main>
+
+        <!-- <script>feather.replace();</script> -->
+
+        <!-- JS, Popper.js, and jQuery -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+        <!-- Custom JS -->
+        <script src=""></script>
+
+        <!-- Icons -->
+        <script src="{% static 'js/button_controller.js' %}"></script>
+        <script src="{% static 'js/dropdown_controller.js' %}"></script>
     </body>
 </html>

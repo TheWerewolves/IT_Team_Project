@@ -9,66 +9,23 @@
 {% block body_block %}
     <div class="container">
         <div class="jumbotron">
-            <img src="/static/images/{{ game.slug }}.png" alt="{{ game.slug }}.png">
-            <h1 class="display-4">LOL</h1>
-            <p class="lead">This is the page of LOL</p>
+            <img src="{% static 'images/games/' %}{{ game.slug }}.png" alt="{{ game.slug }}.png">
+            <h1 class="display-4">{{ game.title }}</h1>
+            <p class="lead">This is the page for {{ game.title }}</p>
             <hr class="my-4">
         </div>
 
         <div class="row ml-auto">
-            
-            <!-- Only this div change in profile/myArticles/favoriteArticles/favoriteGames -->
             <div class="rightProfile card col-md-12 col-sm-12 my-auto">
                 <form>
                     <div class="ArticleOrderType row d-flex justify-content-center">   
-                        <button class="btn btn-light col-3">Order By Date</button>
-                        <button class="btn btn-light col-3">Order By Views</button>
-                        <button class="btn btn-light col-3">Order By Favorites</button>
+                        <button id="orderby_date_btn" class="btn btn-light col-3">Order By Date</button>
+                        <button id="orderby_views_btn" class="btn btn-secondary col-3">Order By Views</button>
+                        <button id="orderby_likes_btn" class="btn btn-light col-3">Order By likes</button>
                     </div>      
 
-                    <div class="list-group my-2">
-
-                        <!-- Each page can read at most 5 articles ! use loop here -->
-                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1 nameOfArticle">My article 1</h5>
-                                <small class="dateOfArticle">2019.10.1</small>
-                            </div>
-                            <!-- These class also used in the article.html -->
-                            <small class="text-muted">
-                                Author: <small class="authorOfArticles">Benny</small> 
-                                <br>
-                                View: <small class="numOfViews">12</small> 
-                                Likes: <small class="numOfViews">12</small>
-                            </small>
-                            
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                            
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">My article 2</h5>
-                                <small>2019.10.1</small>
-                            </div>
-
-                            <small class="text-muted">
-                                Author: <small class="authorOfArticles">Benny</small> 
-                                <br>
-                                View: <small class="numOfViews">12</small> 
-                                Likes: <small class="numOfViews">12</small>
-                            </small>
-                        </a>
-
-                        </div>
+                    {% include 'gamers_havn/article_list.html' %}
                 </form>
-
-
-                <ul class="pagination pagination-lg my-2">
-                    <li class="page-item"><a class="page-link" href="#" tabindex="-1">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                </ul>
-
             </div>
         </div>
     </div>
