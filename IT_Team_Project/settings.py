@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gamers_havn',
     'registration',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [

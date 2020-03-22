@@ -3,3 +3,5 @@ Django==2.2.10
 django-registration-redux==2.2
 Pillow==7.0.0
 requests==2.23.0
+Markdown==3.2.1
+django-cleanup==4.0.0

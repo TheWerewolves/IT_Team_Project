@@ -65,31 +65,58 @@ class ShowArticleView(View):
             article = None
             comments = None
 
+        account = get_current_account(request)
+        is_liked = False
+        if account and article in account.favorite_articles.all():
+            is_liked = True
+
         context_dict = {}
         context_dict['article'] = article
         context_dict['comments'] = comments
+        context_dict['is_liked'] = is_liked
 
         return render(request, 'gamers_havn/article.html', context_dict)
 
     @method_decorator(login_required)
     def post(self, request, article_title_slug):
-        comment = request.POST['comment']
+        comment_content = request.POST['comment']
+
+        try:
+            article = Article.objects.get(slug=article_title_slug)
+            author = get_current_account(request)
+        except Article.DoesNotExist:
+            redirect(reverse('gamers_havn:index'))
+
+        comment = Comment(content=comment_content, author=author, article=article)
+        comment.save()
+
+        context_dict = {}
+        context_dict['article'] = article
+
+        return redirect(reverse('gamers_havn:article', kwargs={'article_title_slug': article.slug}))
 
 class LikeArticleView(View):
     @method_decorator(login_required)
     def get(self, request):
-        category_id = request.GET['category_id']
+        article_id = request.GET['article_id']
+        button = request.GET['button']
+
         try:
-            category = Category.objects.get(id=int(category_id))
-        except Category.DoesNotExist:
+            article = Article.objects.get(id=int(article_id))
+            account = get_current_account(request)
+        except Article.DoesNotExist or Account.DoesNotExist:
             return HttpResponse(-1)
         except ValueError:
             return HttpResponse(-1)
 
-        category.likes += 1
-        category.save()
+        if button == 'Like':
+            account.favorite_articles.add(article)
+        else:
+            account.favorite_articles.remove(article)
+        account.save()
+        article.save()
 
-        return HttpResponse(category.likes)
+        return HttpResponse(article.likes)
 
 class GotoArticleView(View):
     def get(self, request):
@@ -165,6 +192,8 @@ class ProfileView(View):
         username = request.POST['username']
         email = request.POST['email']
         age = request.POST['age']
+        portrait = request.FILES['portrait']
+
         try:
             user_profile = get_user_details(username)
         except TypeError:
@@ -172,8 +201,12 @@ class ProfileView(View):
 
         if user_profile.user.username == username or len(User.objects.filter(username=username)) == 0:
             user_profile.user.username = username
-            user_profile.user.email = email
-            user_profile.age = age
+            if email:
+                user_profile.user.email = email
+            if age:
+                user_profile.age = age
+            if portrait:
+                user_profile.portrait = portrait
             user_profile.save()
             return redirect(reverse('gamers_havn:profile', kwargs={'username': username}))
 
@@ -276,6 +309,27 @@ class SearchView(View):
 
         return render(request, 'gamers_havn/search.html', context_dict)
 
+class EditArticleView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+
+        context_dict = {}
+
+        return render(request, 'gamers_havn/edit_article.html', context_dict)
+
+    @method_decorator(login_required)
+    def post(self, request):
+        title = request.POST['title']
+        content = request.POST['content']
+
+
+
+        # article = Article(title=title, content)
+
+        article_title_slug = None
+
+        return redirect(reverse('gamers_havn/article.html', kwargs={'article_title_slug': article_title_slug}))
+
 
 # Helper functions
 def visitor_cookie_handler(request):
@@ -345,3 +399,11 @@ def get_user_details(username):
     except Account.DoesNotExist:
         return None
     return user_profile
+
+def get_current_account(request):
+    try:
+        account = Account.objects.get(user=request.user)
+    except Account.DoesNotExist:
+        account = None
+
+    return account

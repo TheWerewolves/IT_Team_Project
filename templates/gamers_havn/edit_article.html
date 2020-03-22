@@ -1,0 +1,47 @@
+{% extends 'gamers_havn/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    Edit Article
+{% endblock %}
+
+
+{% block css_block %}
+    <!-- css for markdown editor -->
+    <link rel="stylesheet" href="http://lab.lepture.com/editor/editor.css" />
+{% endblock %}
+    
+
+{% block body_block %}
+    <div class="jumbotron container">
+        <h1 class="display-4">Create your article!</h1>
+        <p class="lead">This is a markdown editor.</p>
+        <hr class="">
+        
+        <div class="card p-4 border-0" id="editor">
+            <div class="card py-2 border-0">
+                <h2 class="cardTitle mx-2">Article Title</h2>
+                <small class="mx-2 text-secondary" >Make sure you have an impressive title for your article!</small>
+                <br>
+                <input class="title mx-2" type="text" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;Title " >
+            </div>
+
+            <div class="card py-2 border-0">
+                <small class="mx-2 text-secondary" >Use the markdown format to write your article easily and beautifully</small>
+                <textarea placeholder="Article Content"></textarea>
+                <div class="row justify-content-center mx-2">
+                    <a class="btn btn-light col-4 mx-4" href="">Exit Editor</a>
+                    <button id="postBtn" class="btn btn-light col-4 mx-4" >Post Your Article</button>
+                </div>  
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block js_block %}
+    <!-- js for markdown editor -->
+    <script type="text/javascript" src="http://lab.lepture.com/editor/editor.js"></script>
+    <script type="text/javascript" src="http://lab.lepture.com/editor/marked.js"></script>
+{% endblock js_block %}
+    

@@ -55,7 +55,7 @@
     margin: 0px auto;
 }
 
-.card{
+.indexCardSet .card{
     background-color: lightgray;
     padding-top: 20px;
 }
@@ -76,10 +76,6 @@
     background-color: darkgray;
 }
 
-.jumbotron{
-    margin: 0px auto 0px;
-    background-color: darkgray;
-}
 
 #mostPopArtTitle, #mostPopGames{
     margin: 20px auto 0px;

@@ -5,10 +5,10 @@ from gamers_havn.models import Account
 
 def base(request):
     account = None
-    accounts = []
     if request.user.is_authenticated:
-        accounts = Account.objects.filter(user=request.user)
-        if len(accounts) != 0:
-            account = accounts[0]
+        try:
+            account = Account.objects.get(user=request.user)
+        except Account.DoesNotExist:
+            account = None
 
     return {'current_account': account}

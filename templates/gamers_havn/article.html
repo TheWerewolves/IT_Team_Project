@@ -18,7 +18,7 @@
                     <hr>
                     <div class="ArticleInfoDiv card-subtitle row d-flex justify-content-center">
                         <div class="InfoDiv col-md-2">
-                            <span> Author: <span class="authorOfArticle"></span>{{ article.author }}</span>
+                            <span>Author: <span class="authorOfArticle"></span>{{ article.author }}</span>
                         </div>
 
                         <div class="InfoDiv col-md-2">
@@ -44,10 +44,15 @@
 
                         <div id="likeDiv col-md-3 col-sm-12">
                         {% if user.is_authenticated %}
-                            <button class="btn btn-light"><i data-feather="thumbs-up"></i>  Like!</button>
+                            <button class="btn btn-light{% if is_liked %} bg-primary text-light{% endif %}" id="like_btn" 
+                                    data-articleid="{{ article.id }}">
+                                <i id="like_icon" data-feather="thumbs-up"></i>  Like</button>
+                            <button class="btn btn-light{% if not is_liked %} bg-primary text-light{% endif %}" id="dislike_btn" 
+                                    data-articleid="{{ article.id }}">
+                                <i id="dislike_icon" data-feather="thumbs-down"></i>  Dislike</button>
                         {% endif %}
                         <span id="articleLikeDiv">
-                                Likes: <span class="numOfLikes">{{ article.likes }}</span>
+                                Likes: <span id="like_count">{{ article.likes }}</span>
                             <span>
                         </div>
                     </div>
@@ -57,20 +62,26 @@
         </div>
 
     {% if user.is_authenticated %}
-        <div class="CommentDiv container">
-            <div class="row card">
-                <div class="CommentArea col-md-9  col-sm-7">
-                    <textarea name="" id="" maxlength="150" placeholder="Please write your comments to the article"></textarea>
-                </div>
+        <form action="." method="POST">
+            {% csrf_token %}
+            <div class="CommentDiv container">
+                <div class="row card">
+                    <div class="CommentImg col-md-1 col-sm-3">
+                        <img src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ comment.author }}'s profile image" class="rounded-circle" height="60px" width="60px">
+                    </div>
+                    <div class="CommentArea col-md-9  col-sm-7">
+                        <textarea autofocus name="comment" id="comment_input" maxlength="256" placeholder="Write your comment here" style="overflow:auto;resize:none"></textarea>
+                    </div>
 
-                <div class="col-md-2 col-sm-2 d-flex flex-direction-colume content-justify-center">
-                    <button class="btn btn-light " >Submit!</button>
+                    <div class="col-md-2 col-sm-2 d-flex flex-direction-colume content-justify-center">
+                        <button class="btn btn-secondary" type="submit">Submit!</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     {% endif %}
 
-        <div id="showCommentDiv" class="CommentDiv container">
+        <div id="showCommentDiv" class="CommentDiv container mb-5">
             <div class="row card d-flex">
                 {% include 'gamers_havn/comment_list.html' %}
             </div>
@@ -78,3 +89,8 @@
     </div>
 {% endblock %}
 
+
+{% block js_block %}
+    <script src="{% static 'js/article.js' %}"></script>
+{% endblock js_block %}
+    
