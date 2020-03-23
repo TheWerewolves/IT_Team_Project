@@ -20,18 +20,15 @@
         
         <div class="card p-4 border-0" id="editor">
             <div class="card py-2 border-0">
-                <h2 class="cardTitle mx-2">Article Title</h2>
-                <small class="mx-2 text-secondary" >Make sure you have an impressive title for your article!</small>
-                <br>
-                <input class="title mx-2" type="text" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;Title " >
+                <input id="input_article_title" class="mx-2" type="text" placeholder="Title" maxlength="128">
             </div>
 
             <div class="card py-2 border-0">
-                <small class="mx-2 text-secondary" >Use the markdown format to write your article easily and beautifully</small>
-                <textarea placeholder="Article Content"></textarea>
+                <small class="mx-2 text-secondary" >Use the markdown format to write your article gracefully</small>
+                <textarea></textarea>
                 <div class="row justify-content-center mx-2">
-                    <a class="btn btn-light col-4 mx-4" href="">Exit Editor</a>
-                    <button id="postBtn" class="btn btn-light col-4 mx-4" >Post Your Article</button>
+                    <button id="exit_edit_btn" class="btn btn-light col-4 mx-4" data-url="{% url 'gamers_havn:index' %}">Exit Editor</button>
+                    <button id="post_article_btn" class="btn btn-light col-4 mx-4">Post Your Article</button>
                 </div>  
             </div>
         </div>
@@ -43,5 +40,7 @@
     <!-- js for markdown editor -->
     <script type="text/javascript" src="http://lab.lepture.com/editor/editor.js"></script>
     <script type="text/javascript" src="http://lab.lepture.com/editor/marked.js"></script>
+
+    <script src="{% static 'js/edit_article.js' %}"></script>
 {% endblock js_block %}
     

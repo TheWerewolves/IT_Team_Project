@@ -47,7 +47,7 @@
                             <button class="btn btn-light{% if is_liked %} bg-primary text-light{% endif %}" id="like_btn" 
                                     data-articleid="{{ article.id }}">
                                 <i id="like_icon" data-feather="thumbs-up"></i>  Like</button>
-                            <button class="btn btn-light{% if not is_liked %} bg-primary text-light{% endif %}" id="dislike_btn" 
+                            <button class="btn btn-light" id="dislike_btn" 
                                     data-articleid="{{ article.id }}">
                                 <i id="dislike_icon" data-feather="thumbs-down"></i>  Dislike</button>
                         {% endif %}

@@ -4,11 +4,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
-
+from django.core.files.base import ContentFile
 from django.db.models import Q
 
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -16,6 +17,8 @@ from django.views import View
 
 from gamers_havn.models import Account, Game, Article, Tag, Comment
 from gamers_havn.forms import UserForm, UserProfileForm
+
+from uuid import uuid4
 
 
 class IndexView(View):
@@ -183,7 +186,7 @@ class ProfileView(View):
         try:
             user_profile = get_user_details(username)
         except TypeError:
-            return redirect(reverse('gamers_havn/index.html'))
+            return redirect(reverse('gamers_havn:index'))
 
         return render(request, 'gamers_havn/profile.html', {'user_profile': user_profile})
     
@@ -218,7 +221,7 @@ class ChangePasswordView(View):
         try:
             user_profile = get_user_details(username)
         except TypeError:
-            return redirect(reverse('gamers_havn/index.html'))
+            return redirect(reverse('gamers_havn:index'))
 
         return render(request, 'gamers_havn/change_password.html', {'user_profile': user_profile})
 
@@ -256,7 +259,7 @@ class CreatedArticlesView(View):
         try:
             user_profile = get_user_details(username)
         except TypeError:
-            return redirect(reverse('gamers_havn/index.html'))
+            return redirect(reverse('gamers_havn:index'))
         article_list = Article.objects.filter(author__user__username=username)
         context_dict = {}
         context_dict['user_profile'] = user_profile
@@ -269,7 +272,7 @@ class FavoriteArticlesView(View):
             user_profile = get_user_details(username)
             article_list = user_profile.favorite_articles.all()
         except TypeError:
-            return redirect(reverse('gamers_havn/index.html'))
+            return redirect(reverse('gamers_havn:index'))
         context_dict = {}
         context_dict['user_profile'] = user_profile
         context_dict['articles'] = article_list
@@ -283,7 +286,7 @@ class FollowedGamesView(View):
             for game in game_list:
                 game.articles = Article.objects.filter(game__title=game.title).count()
         except TypeError:
-            return redirect(reverse('gamers_havn/index.html'))
+            return redirect(reverse('gamers_havn:index'))
         context_dict = {}
         context_dict['user_profile'] = user_profile
         context_dict['games'] = game_list
@@ -320,15 +323,20 @@ class EditArticleView(View):
     @method_decorator(login_required)
     def post(self, request):
         title = request.POST['title']
+        game_title = 'Dark Souls'
         content = request.POST['content']
+        content_file = ContentFile(content)
 
+        try:
+            author = get_current_account(request)
+            game = Game.objects.get(title=game_title)
+        except Game.DoesNotExist or Account.DoesNotExist:
+            return HttpResponse(reverse('gamers_havn:index'))
 
+        article = Article.objects.create(title=title, author=author, game=game)
+        article.content.save(uuid4().hex, content_file)
 
-        # article = Article(title=title, content)
-
-        article_title_slug = None
-
-        return redirect(reverse('gamers_havn/article.html', kwargs={'article_title_slug': article_title_slug}))
+        return HttpResponse(reverse('gamers_havn:article', kwargs={'article_title_slug': article.slug}))
 
 
 # Helper functions

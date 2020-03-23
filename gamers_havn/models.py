@@ -2,7 +2,6 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.files import File
 from django.db import models
 
 from django.template.defaultfilters import slugify
@@ -35,11 +34,6 @@ class Account(models.Model):
     favorite_articles = models.ManyToManyField('Article', blank=True)
     followed_games = models.ManyToManyField('Game', blank=True)
 
-    def save(self, *args, **kwargs):
-        if not self.portrait:
-            self.portrait = File(open(settings.STATIC_DIR+'\\images\\user_default.png', "rb"))
-        super(Account, self).save(*args, **kwargs)
-
     def __str__(self):
         return self.user.username
 
@@ -67,9 +61,9 @@ class Article(models.Model):
 
     TITLE_MAX_LENGTH = 128
 
-    id = models.AutoField(primary_key=True)
+    id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=TITLE_MAX_LENGTH)
-    content = models.FileField(upload_to=PathAndRename('articles'))
+    content = models.FileField(upload_to='articles')
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag')
@@ -79,6 +73,12 @@ class Article(models.Model):
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
+        if not self.id:
+            a = Article.objects.order_by('-id').first()
+            if not a:
+                self.id = 0
+            else:
+                self.id = a.id + 1
         self.slug = f"{self.id}-{slugify(self.title)}"
         self.likes = self.account_set.count()
         super(Article, self).save(*args, **kwargs)
