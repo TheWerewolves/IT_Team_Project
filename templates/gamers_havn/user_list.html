@@ -4,7 +4,7 @@
     <div >
         <h2 class="py-4 px-4 my-1 mx-1" >Users</h2>
     </div>
-
+    <hr>
     <div class="list-group my-2">
     {% for u in users %}
         <a href="{% url 'gamers_havn:profile' u.user.username %}" class="list-group-item list-group-item-action flex-colume align-items-start">
@@ -21,7 +21,7 @@
             </div> 
         </a>
     {% empty %}
-        <strong>No users here!</strong>
+        <strong class="ml-5">No users here!</strong>
     {% endfor %}
     </div>
 </form>

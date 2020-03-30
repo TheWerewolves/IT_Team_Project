@@ -6,6 +6,11 @@
 {% endblock %}
 
 
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'css/game.css' %}" rel="stylesheet">
+{% endblock %}
+
+
 {% block body_block %}
     <div class="container">
         <div class="jumbotron">
@@ -29,10 +34,10 @@
         <div class="row mx-auto">
             <div class="card col-md-12 col-sm-12 mb-5">
                 <form>
-                    <div id="orderby_div"  data-gameid="{{ game.id }}" class="ArticleOrderType row d-flex justify-content-center">   
-                        <button id="orderby_date_btn" class="btn btn-light col-3" type="button">Order By Date</button>
-                        <button id="orderby_views_btn" class="btn btn-light col-3 bg-primary text-light" type="button">Order By Views</button>
-                        <button id="orderby_likes_btn" class="btn btn-light col-3" type="button">Order By Likes</button>
+                    <div id="orderby_div" data-gameid="{{ game.id }}" class="row d-flex justify-content-center">
+                        <button id="orderby_date_btn" class="btn btn-light col-3 mx-2" type="button">Order By Date</button>
+                        <button id="orderby_views_btn" class="btn btn-light col-3 mx-2 bg-primary text-light" type="button">Order By Views</button>
+                        <button id="orderby_likes_btn" class="btn btn-light col-3 mx-2" type="button">Order By Likes</button>
                     </div>
 
                     <div id="article_list_div" class="mb-5">

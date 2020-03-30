@@ -7,6 +7,11 @@
 {% endblock %}
 
 
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'css/article.css' %}" rel="stylesheet">
+{% endblock %}
+
+
 {% block body_block %}
     <div class="container">
         <div class="jumbotron">
@@ -31,7 +36,7 @@
             <div class="row">
                 <div class="col-lg-12" >
                     <hr>
-                    <div class="ArticleTitle card-title">
+                    <div class="card-title text-center">
                         <h1 class="nameOfArticle">{{ article.title }}</h1>
                     </div>
                     <hr>
@@ -49,11 +54,11 @@
                         </div>
                     </div>
                     <hr>
-                    <pre class="ArticleContent">
+                    <div class="py-3 px-2">
                         <p>{{ article.content|markdown|safe }}</p>
-                    </pre>
+                    </div>
                     <hr>
-                    <div class="ArticleInfoDiv card-subtitle row d-flex content-justify-between">
+                    <div class="article-info card-subtitle row d-flex content-justify-between px-3">
                         <div id="tagDiv col-md-7 col-sm-12">
                         {% if current_account == article.author %}
                             <form action="{% url 'gamers_havn:edit_article' %}" method="GET">
@@ -65,11 +70,11 @@
 
                         <div id="like_div">
                             {% if user.is_authenticated %}
-                                <button class="btn btn-light{% if is_liked %} bg-primary text-light{% endif %}" id="like_btn" data-articleid="{{ article.id }}">
-                                    <i id="like_icon" data-feather="thumbs-up"></i>  <span>Like{% if is_liked %}d{% endif %}</span>
-                                </button>
+                            <button class="btn btn-light{% if is_liked %} bg-primary text-light{% endif %}" id="like_btn" data-articleid="{{ article.id }}">
+                                <i id="like_icon" data-feather="thumbs-up"></i>  <span>Like{% if is_liked %}d{% endif %}</span>
+                            </button>
                             {% endif %}
-                            <span>
+                            <span class="ml-3">
                                 Likes: <span id="like_count">{{ article.likes }}</span>
                             </span>
                         </div>
@@ -82,15 +87,15 @@
     {% if user.is_authenticated %}
         <form action="." method="POST">
             {% csrf_token %}
-            <div class="CommentDiv container">
+            <div class="comment-div container mt-4">
                 <div class="row card">
-                    <div class="CommentImg col-md-1 col-sm-3">
+                    <div class="comment-image col-md-1 col-sm-3">
                         <img class="user_portrait rounded-circle" 
                              src="{% if current_account.portrait %}{{ MEDIA_URL }}{{ current_account.portrait }}{% else %}{% static 'images/user_default.png' %}{% endif %}"
                              alt="{{ user }}'s profile image" height="60px" width="60px">
                     </div>
-                    <div class="CommentArea col-md-9  col-sm-7">
-                        <textarea name="comment" id="comment_input" maxlength="256" placeholder="Write your comment here" style="overflow:auto;resize:none"></textarea>
+                    <div class="col-md-9 col-sm-7">
+                        <textarea name="comment" id="comment_input" maxlength="256" placeholder="Write your comment here"></textarea>
                     </div>
 
                     <div class="col-md-2 col-sm-2 d-flex flex-direction-colume content-justify-center">
@@ -101,7 +106,7 @@
         </form>
     {% endif %}
 
-        <div id="showCommentDiv" class="CommentDiv container mb-5">
+        <div class="container mb-5 mt-4">
             <div class="row card d-flex">
                 {% include 'gamers_havn/comment_list.html' %}
             </div>

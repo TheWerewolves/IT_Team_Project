@@ -19,7 +19,7 @@ $(document).ready(function () {
         let article_id = $(this).attr('data-articleid');
         let article_title = $('#input_article_title').val();
         let article_content = editor.codemirror.getValue();
-        let game_title = $('#selected_game').text();
+        let game_title = $('#selected_game').text().trim();
         if(article_title.length == 0) {
             alert('The article title is empty!');
             return;

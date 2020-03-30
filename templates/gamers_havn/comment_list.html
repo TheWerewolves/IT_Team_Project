@@ -3,18 +3,19 @@
 <div>
     <h2 class="py-4 px-4 my-1 mx-1" >Comments</h2>
 </div>
-
-<div id="showCommentDiv" class="CommentDiv container">
+<hr>
+<div id="showCommentDiv" class="comment-div container">
 {% for comment in comments %}
     <div class="row card d-flex">
-        <a class="CommentImg col-md-1 col-sm-3" href="{% url 'gamers_havn:profile' comment.author %}">
+        <a class="comment-image col-md-1 col-sm-3" href="{% url 'gamers_havn:profile' comment.author %}">
             <img class="user_portrait rounded-circle" 
                  src="{% if comment.author.portrait %}{{ MEDIA_URL }}{{ comment.author.portrait }}{% else %}{% static 'images/user_default.png' %}{% endif %}"
                  alt="{{ comment.author }}'s profile image" height="60px" width="60px">
         </a>
         <div class="CommentArea col-md-11  col-sm-7">
             <div class="d-flex content-justify-center">
-                <span class="commentName font-weight-bold d-block my-0" >{{ comment.author }}</span> <small class="text-secondary font-weight-light my-0 mx-2 pt-1" >{{ comment.created_at }}</small>
+                <a class="commentName font-weight-bold d-block my-0 text-white" href="{% url 'gamers_havn:profile' comment.author %}">{{ comment.author }}</a>
+                <small class="font-weight-light my-0 mx-2 pt-1" >{{ comment.created_at }}</small>
             </div>
             <p>{{ comment.content }}</p>
         </div>
@@ -22,6 +23,6 @@
         <div class="col-md-0 col-sm-2 IndexOfCommentDiv"></div>
     </div>
 {% empty %}
-    <strong>No comments here!</strong>
+    <strong class="ml-5">No comments here!</strong>
 {% endfor %}
 </div>

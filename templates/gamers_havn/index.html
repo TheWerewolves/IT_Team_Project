@@ -6,6 +6,11 @@
 {% endblock %}
 
 
+{% block css_block %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" rel="stylesheet">
+{% endblock %}
+
+
 {% block body_block %}
     <div id="indexpage">
         <div class="jumbotron jumbotron-fluid">
@@ -20,7 +25,7 @@
             </div>
         </div>
 
-        <div id="mostPopArtTitle" class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <h1 class="display-4" style="text-align:center" >Most Popular Articles</h1><br><br>
             </div>
@@ -61,7 +66,7 @@
             </div>
         </div>
         
-        <div id="mostPopGames" class="jumbotron jumbotron-fluid">
+        <div class="jumbotron jumbotron-fluid mb-0">
             <div class="container">
                 <h1 class="display-4" style="text-align:center">Most Popular Games</h1><br><br>
                 <div class="row justify-content-center TitleFont">

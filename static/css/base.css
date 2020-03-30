@@ -1,4 +1,8 @@
 /* Header */
+header {
+    background-color: rgb(50, 50, 50);
+}
+
 header li, header button {
     margin: 5px 5px 5px 0px;
 }
@@ -7,19 +11,40 @@ header li, header button {
 /* Body */
 body {
     background-image: url('/static/images/bg/bg_game_index.jpg');
+    background-size: cover;
 }
 
 .card {
-    background-color: rgb(255, 255, 255);
-    padding-top: 10px;
+    padding: 25px 50px;
 }
 
 .jumbotron {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    background-color: rgb(255, 255, 255);
 }
 
+.card, .jumbotron {
+    background-color: rgb(105, 105, 120, 0.5);
+    color: white;
+}
+
+.list-group-item {
+    background-color: rgba(83, 83, 95, 0.5);
+    color: white;
+}
+
+.list-group-item:hover {
+    background-color: rgba(216, 216, 216, 0.5);
+    color: black;
+}
+
+.bg-trans-grey {
+    background-color: rgb(105, 105, 120, 0.5);
+}
+
+.bg-trans-light-grey {
+    background-color: rgba(199, 199, 214, 0.8);
+}
 
 /* Footer */
 footer {
@@ -44,4 +69,8 @@ footer a {
 /* remove the small arrow on the dropdown for portrait */
 #portrait_dropdown .dropdown-toggle::after {
     display:none;
+}
+
+.btn-light {
+    border: 0;
 }

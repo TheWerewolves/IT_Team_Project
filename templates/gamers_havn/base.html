@@ -19,16 +19,13 @@
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/base.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/index.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/article.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/profile.css' %}" rel="stylesheet">
         {% block css_block %}{% endblock %}
     </head>
 
     <body>
         <!-- Header -->
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark MyTop">
+            <nav class="navbar navbar-expand-lg">
                 <a class="navbar-brand" href="{% url 'gamers_havn:index' %}">
                     <img src="{% static 'images/brand.png' %}" alt="" height="50px">
                 </a>

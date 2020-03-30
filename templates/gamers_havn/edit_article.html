@@ -26,7 +26,7 @@
         <div class="d-flex justify-content-evenly align-items-center">
             <div> This is an article for: </div>
             <div class="dropdown ml-2">
-                <a id="selected_game" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a id="selected_game" class="nav-link dropdown-toggle text-white font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {% if article %}
                     {{ article.game }}
                 {% elif game %}
@@ -44,14 +44,14 @@
         </div>
         
         <!-- Markdown Editor -->
-        <div class="card p-4 border-0" id="editor">
-            <div class="card py-2 border-0">
+        <div class="card p-4 border-0 bg-trans-light-grey" id="editor">
+            <div class="jumbotron py-2 border-0 align-items-center d-flex">
                 <strong>Title</strong>
-                <input id="input_article_title" class="mx-2" type="text" placeholder="Title" maxlength="128" value="{{ article.title }}">
+                <input id="input_article_title" class="mx-3 mt-2 w-100 bg-trans-grey text-white border-0" type="text" placeholder="Title" maxlength="128" value="{{ article.title }}">
             </div>
 
             <div class="card py-2 border-0">
-                <small class="mx-2 text-secondary" >Use the markdown format to write your article gracefully</small>
+                <small class="mx-2 my-1" >Use the markdown format to write your article gracefully</small>
                 <textarea value="{{ article.content|safe }}">{{ article.content|safe }}</textarea>
                 <div class="row justify-content-center mx-2">
                     <button id="exit_edit_btn" class="btn btn-light col-4 mx-4" data-url="{% url 'gamers_havn:index' %}">Exit Editor</button>

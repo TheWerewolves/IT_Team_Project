@@ -17,3 +17,12 @@
     height: 50px;
     border: 1px lightcyan inset;
 }
+
+#editor .editor-preview, .CodeMirror-scroll {       
+    background-color: white;
+    color: black;
+}
+
+#input_article_title {
+    text-indent: 10px;
+}

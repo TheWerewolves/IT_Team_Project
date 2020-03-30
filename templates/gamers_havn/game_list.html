@@ -4,7 +4,7 @@
     <div >
         <h2 class="py-4 px-4 my-1 mx-1" >Games</h2>
     </div>
-
+    <hr>
     <div class="list-group my-2">
     {% for game in games %}
         <a href="{% url 'gamers_havn:game' game.slug %}" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -29,7 +29,7 @@
             </div>
         </a>
     {% empty %}
-        <strong>No games here!</strong>
+        <strong class="ml-5">No games here!</strong>
     {% endfor %}
     </div>
 </form>
