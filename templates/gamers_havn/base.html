@@ -20,8 +20,6 @@
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/base.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/index.css' %}" rel="stylesheet">
-        <!-- <link rel="stylesheet" href="{% static 'css/login.css' %}" rel="stylesheet"> -->
-        <link rel="stylesheet" href="{% static 'css/signup.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/article.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/profile.css' %}" rel="stylesheet">
         {% block css_block %}{% endblock %}
@@ -81,8 +79,9 @@
                     {% if user.is_authenticated %}
                         <li id="portrait_dropdown" class="nav-item dropdown">
                             <button class="btn btn-secondary dropdown-toggle d-flex justify-content-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="user_portrait rounded-circle" src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ user.username }}'s profile image" 
-                                     data-altsrc="{% static 'images/user_default.png' %}" height="30px" width="30px">
+                                <img class="user_portrait rounded-circle" 
+                                    src="{% if current_account.portrait %}{{ MEDIA_URL }}{{ current_account.portrait }}{% else %}{% static 'images/user_default.png' %}{% endif %}"
+                                    alt="{{ user }}'s profile image" height="30px" width="30px">
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" >
                                 <h6 class="dropdown-header">Sign in as : <br><span class="font-weight-bold">{{ user.username }}</span> </h6>

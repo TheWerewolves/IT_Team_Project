@@ -85,7 +85,9 @@
             <div class="CommentDiv container">
                 <div class="row card">
                     <div class="CommentImg col-md-1 col-sm-3">
-                        <img src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ comment.author }}'s profile image" class="rounded-circle" height="60px" width="60px">
+                        <img class="user_portrait rounded-circle" 
+                             src="{% if current_account.portrait %}{{ MEDIA_URL }}{{ current_account.portrait }}{% else %}{% static 'images/user_default.png' %}{% endif %}"
+                             alt="{{ user }}'s profile image" height="60px" width="60px">
                     </div>
                     <div class="CommentArea col-md-9  col-sm-7">
                         <textarea name="comment" id="comment_input" maxlength="256" placeholder="Write your comment here" style="overflow:auto;resize:none"></textarea>

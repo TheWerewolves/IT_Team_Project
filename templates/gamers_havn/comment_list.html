@@ -8,7 +8,9 @@
 {% for comment in comments %}
     <div class="row card d-flex">
         <a class="CommentImg col-md-1 col-sm-3" href="{% url 'gamers_havn:profile' comment.author %}">
-            <img src="{{ MEDIA_URL }}{{ comment.author.portrait }}" alt="{{ comment.author }}'s profile image" class="rounded-circle" height="60px" width="60px">
+            <img class="user_portrait rounded-circle" 
+                 src="{% if comment.author.portrait %}{{ MEDIA_URL }}{{ comment.author.portrait }}{% else %}{% static 'images/user_default.png' %}{% endif %}"
+                 alt="{{ comment.author }}'s profile image" height="60px" width="60px">
         </a>
         <div class="CommentArea col-md-11  col-sm-7">
             <div class="d-flex content-justify-center">

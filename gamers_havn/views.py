@@ -4,7 +4,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth.models import User
-from django.core.files.base import ContentFile
 from django.db.models import Q
 
 from django.http import HttpResponse
@@ -103,7 +102,6 @@ class ShowArticleView(View):
     def get(self, request, article_title_slug):
         try:
             article = Article.objects.get(slug=article_title_slug)
-            article.content = article.content.read().decode('ansi')
             comments = Comment.objects.filter(article=article)
         except Article.DoesNotExist:
             article = None
@@ -276,7 +274,13 @@ class ChangePasswordView(View):
         except TypeError:
             return redirect(reverse('gamers_havn:index'))
 
-        return render(request, 'gamers_havn/change_password.html', {'user_profile': user_profile})
+        context_dict = {}
+        context_dict['user_profile'] = user_profile
+
+        if not request.user.has_usable_password():
+            context_dict['change_pw_message'] = "You don't yet have a password, set it here in order to login next time!"
+
+        return render(request, 'gamers_havn/change_password.html', context_dict)
 
     @method_decorator(login_required)
     def post(self, request, username):
@@ -290,7 +294,7 @@ class ChangePasswordView(View):
             return redirect(reverse('gamers_havn:index'))
 
         change_pw_message = ''
-        if check_password(old_password, user.password):
+        if check_password(old_password, user.password) or not user.has_usable_password():
             if new_password == confirm_password:
                 user.password = make_password(new_password)
                 user.save()
@@ -375,7 +379,6 @@ class EditArticleView(View):
         if 'article_id' in request.GET:
             article_id = request.GET['article_id']
             article = Article.objects.get(id=int(article_id))
-            article.content = article.content.read().decode('ansi')
             context_dict['article'] = article
         elif 'game_id' in request.GET:
             game_id = request.GET['game_id']
@@ -390,7 +393,6 @@ class EditArticleView(View):
         title = request.POST['title']
         game_title = request.POST['game_title']
         content = request.POST['content']
-        content_file = ContentFile(content)
 
         try:
             author = get_current_account(request)
@@ -402,7 +404,8 @@ class EditArticleView(View):
         article.title = title
         article.author = author
         article.game = game
-        article.content.save(uuid4().hex, content_file)
+        article.content = content
+        article.save()
 
         return HttpResponse(reverse('gamers_havn:article', kwargs={'article_title_slug': article.slug}))
 
@@ -434,7 +437,7 @@ def get_article_list(max_result=0, query=''):
     article_list = []
     if len(query) > 0:
         article_list = Article.objects.filter(
-            Q(title__icontains=query) | Q(author__user__username__icontains=query) | Q(game__title__icontains=query)
+            Q(title__icontains=query) | Q(author__user__username__icontains=query) | Q(game__title__icontains=query) | Q(content__icontains=query)
         )
     else:
         article_list = Article.objects.all()
@@ -470,16 +473,9 @@ def get_user_list(max_result=0, query=''):
     return user_list
 
 def get_user_details(username):
-    try:
-        user_profile = Account.objects.get(user__username=username)
-    except Account.DoesNotExist:
-        return None
+    user_profile = Account.objects.get_or_create(user__username=username)[0]
     return user_profile
 
 def get_current_account(request):
-    try:
-        account = Account.objects.get(user=request.user)
-    except Account.DoesNotExist:
-        account = None
-
+    account = Account.objects.get_or_create(user=request.user)[0]
     return account

@@ -158,7 +158,7 @@ REGISTRATION_OPEN = True
 
 REGISTEATION_AUTO_LOGIN = True
 
-LOGIN_REDIRECT_URL = 'gamers_havn:login_with_social'
+LOGIN_REDIRECT_URL = 'gamers_havn:index'
 
 LOGIN_URL = 'auth_login'
 

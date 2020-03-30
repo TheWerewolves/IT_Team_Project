@@ -62,7 +62,7 @@ class Article(models.Model):
 
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=TITLE_MAX_LENGTH)
-    content = models.FileField(upload_to='articles')
+    content = models.TextField()
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
