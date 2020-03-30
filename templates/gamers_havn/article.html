@@ -35,29 +35,35 @@
         <div id="articleDiv" class="container card">
             <div class="row">
                 <div class="col-lg-12" >
-                    <hr>
+
                     <div class="card-title text-center">
                         <h1 class="nameOfArticle">{{ article.title }}</h1>
                     </div>
+
                     <hr>
-                    <div class="ArticleInfoDiv card-subtitle row d-flex justify-content-center">
-                        <div class="InfoDiv col-md-2">
+
+                    <div class="card-subtitle row d-flex justify-content-center">
+                        <div class="col-md-2">
                             <span>Author: <span class="authorOfArticle"></span>{{ article.author }}</span>
                         </div>
 
-                        <div class="InfoDiv col-md-2">
+                        <div class="col-md-2">
                             <span>Views: <span class="numOfViews">{{ article.views }}</span></span>
                         </div>
 
-                        <div class="InfoDiv col-md-4">
+                        <div class="col-md-4">
                             <span>Created at: <span class="dateOfArticle">{{ article.created_at }}</span></span>
                         </div>
                     </div>
+
                     <hr>
+
                     <div class="py-3 px-2">
                         <p>{{ article.content|markdown|safe }}</p>
                     </div>
+
                     <hr>
+
                     <div class="article-info card-subtitle row d-flex content-justify-between px-3">
                         <div id="tagDiv col-md-7 col-sm-12">
                         {% if current_account == article.author %}
@@ -79,7 +85,6 @@
                             </span>
                         </div>
                     </div>
-                    <hr>
                 </div>
             </div>
         </div>

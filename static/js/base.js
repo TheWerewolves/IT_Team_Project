@@ -11,8 +11,9 @@ $(document).ready(function () {
 
     $('#search_type_dropdown a').click(function (e) { 
         e.preventDefault();
-        $(this).parent().siblings('a').children('span').text($(this).text());
-        $(this).parent().siblings('input').val($(this).text());
+        let a = $(this).parent().siblings('a');
+        a.children('span').text($(this).text());
+        a.children('input').val($(this).text());
     });
     
 });

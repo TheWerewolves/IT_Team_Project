@@ -10,11 +10,9 @@
         <a href="{% url 'gamers_havn:profile' u.user.username %}" class="list-group-item list-group-item-action flex-colume align-items-start">
             <div class="d-flex-colume w-100 ">
                 <div class="d-flex-row">
-                {% if u.portrait %}
-                    <img src="{{ MEDIA_URL }}{{ u.portrait }}" alt="{{ u.user.username }}'s profile image" height="30px" width="30px">
-                {% else %}
-                    <img src="{% static 'images/user_default.png' %}" alt="User portrait" height="30px" width="30px">
-                {% endif %}
+                    <img class="user_portrait rounded-circle" 
+                         src="{% if u.portrait %}{{ MEDIA_URL }}{{ u.portrait }}{% else %}{% static 'images/user_default.png' %}{% endif %}"
+                         alt="{{ u }}'s profile image" height="30px" width="30px">
                     <span class="mx-2">{{ u.user.username }}</span>
                 </div>
                 <small class="my-2">Email Address：{{ u.user.email }}</small>

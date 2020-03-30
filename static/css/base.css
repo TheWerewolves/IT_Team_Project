@@ -74,3 +74,7 @@ footer a {
 .btn-light {
     border: 0;
 }
+
+hr {
+    border: 0.5px solid gray;
+}
