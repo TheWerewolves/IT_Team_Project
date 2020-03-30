@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    {{ game.title }}
+    {{ user_profile.user.username }}'s Created Articles
 {% endblock %}
 
 
@@ -14,7 +14,7 @@
             <hr class="my-4">
         </div>
 
-        <div class="row ml-auto mt-4">
+        <div class="row mx-auto mt-4">
             <div class="list-group col-md-3 col-sm-12">
                 <a href="{% url 'gamers_havn:profile' user_profile.user.username %}" class="list-group-item list-group-item-action">Personal Infomation</a>
             {% if user.username == user_profile.user.username %}

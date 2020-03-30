@@ -1,13 +1,32 @@
 {% extends 'gamers_havn/base.html' %}
 {% load staticfiles %}
+{% load gamers_havn_template_tags %}
 
 {% block title_block %}
-    {{ game.title }}
+    {{ article.title }}
 {% endblock %}
 
 
 {% block body_block %}
-    <div id="">
+    <div class="container">
+        <div class="jumbotron">
+            <img src="{% static 'images/games/' %}{{ game.slug }}.png" alt="{{ game.slug }}.png">
+            <h1 class="display-4">{{ game.title }}</h1>
+            <p class="lead">Visit the official game site <a href="{{ game.url }}">here</a></p>
+            <hr class="my-4">
+            {% if user.is_authenticated %}
+            <button id="follow_btn" 
+                    class="btn btn-light btn-lg {% if game in current_account.followed_games.all %}bg-primary text-light{% endif %}" 
+                    type="button" data-gameid="{{ game.id }}">
+                <i id="follow_icon" data-feather="plus"></i>  <span>Follow{% if game in current_account.followed_games.all %}ed{% endif %}</span>
+            </button>
+            <form id="post_article_form" class="d-none" action="{% url 'gamers_havn:edit_article' %}" method="GET">
+                <input type="hidden" name="game_id" value="{{ game.id }}">
+            </form>
+            <button id="post_article_btn" class="btn btn-light btn-lg ml-2" type="submit" form="post_article_form">Post Article</button>
+            {% endif %}
+        </div>
+
         <div id="articleDiv" class="container card">
             <div class="row">
                 <div class="col-lg-12" >
@@ -30,30 +49,29 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="ArticleContent">
-                        <p>{{ article.content }}</p>
-                    </div>
+                    <pre class="ArticleContent">
+                        <p>{{ article.content|markdown|safe }}</p>
+                    </pre>
                     <hr>
                     <div class="ArticleInfoDiv card-subtitle row d-flex content-justify-between">
                         <div id="tagDiv col-md-7 col-sm-12">
-                            <!-- <button class="btn btn-light"><i data-feather="tag"></i>  add Tags</button> -->
-                            <div id="articleTagsDiv">
-
-                            </div>
+                        {% if current_account == article.author %}
+                            <form action="{% url 'gamers_havn:edit_article' %}" method="GET">
+                                <button type="submit" id="edit_article_btn" class="btn btn-light"><i data-feather="edit"></i>  Edit</button>
+                                <input type="hidden" name="article_id" value="{{ article.id }}">
+                            </form>
+                        {% endif %}
                         </div>
 
-                        <div id="likeDiv col-md-3 col-sm-12">
-                        {% if user.is_authenticated %}
-                            <button class="btn btn-light{% if is_liked %} bg-primary text-light{% endif %}" id="like_btn" 
-                                    data-articleid="{{ article.id }}">
-                                <i id="like_icon" data-feather="thumbs-up"></i>  Like</button>
-                            <button class="btn btn-light" id="dislike_btn" 
-                                    data-articleid="{{ article.id }}">
-                                <i id="dislike_icon" data-feather="thumbs-down"></i>  Dislike</button>
-                        {% endif %}
-                        <span id="articleLikeDiv">
-                                Likes: <span id="like_count">{{ article.likes }}</span>
+                        <div id="like_div">
+                            {% if user.is_authenticated %}
+                                <button class="btn btn-light{% if is_liked %} bg-primary text-light{% endif %}" id="like_btn" data-articleid="{{ article.id }}">
+                                    <i id="like_icon" data-feather="thumbs-up"></i>  <span>Like{% if is_liked %}d{% endif %}</span>
+                                </button>
+                            {% endif %}
                             <span>
+                                Likes: <span id="like_count">{{ article.likes }}</span>
+                            </span>
                         </div>
                     </div>
                     <hr>
@@ -70,7 +88,7 @@
                         <img src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ comment.author }}'s profile image" class="rounded-circle" height="60px" width="60px">
                     </div>
                     <div class="CommentArea col-md-9  col-sm-7">
-                        <textarea autofocus name="comment" id="comment_input" maxlength="256" placeholder="Write your comment here" style="overflow:auto;resize:none"></textarea>
+                        <textarea name="comment" id="comment_input" maxlength="256" placeholder="Write your comment here" style="overflow:auto;resize:none"></textarea>
                     </div>
 
                     <div class="col-md-2 col-sm-2 d-flex flex-direction-colume content-justify-center">

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from gamers_havn.models import Account, Game, Article, Tag, Comment
+from gamers_havn.models import Account, Game, Article, Comment
 
 
 class AccountAdmin(admin.ModelAdmin):
@@ -10,6 +10,5 @@ class AccountAdmin(admin.ModelAdmin):
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Game)
 admin.site.register(Article)
-admin.site.register(Tag)
 admin.site.register(Comment)
 

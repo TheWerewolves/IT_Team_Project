@@ -11,22 +11,40 @@
         <div class="jumbotron">
             <img src="{% static 'images/games/' %}{{ game.slug }}.png" alt="{{ game.slug }}.png">
             <h1 class="display-4">{{ game.title }}</h1>
-            <p class="lead">This is the page for {{ game.title }}</p>
+            <p class="lead">Visit the official game site <a href="{{ game.url }}">here</a></p>
             <hr class="my-4">
+            {% if user.is_authenticated %}
+            <button id="follow_btn" 
+                    class="btn btn-light btn-lg {% if game in current_account.followed_games.all %}bg-primary text-light{% endif %}" 
+                    type="button" data-gameid="{{ game.id }}">
+                <i id="follow_icon" data-feather="plus"></i>  <span>Follow{% if game in current_account.followed_games.all %}ed{% endif %}</span>
+            </button>
+            <form id="post_article_form" class="d-none" action="{% url 'gamers_havn:edit_article' %}" method="GET">
+                <input type="hidden" name="game_id" value="{{ game.id }}">
+            </form>
+            <button id="post_article_btn" class="btn btn-light btn-lg ml-2" type="submit" form="post_article_form">Post Article</button>
+            {% endif %}
         </div>
 
         <div class="row mx-auto">
-            <div class="card col-md-12 col-sm-12 my-auto">
+            <div class="card col-md-12 col-sm-12 mb-5">
                 <form>
-                    <div class="ArticleOrderType row d-flex justify-content-center">   
-                        <button id="orderby_date_btn" class="btn btn-light col-3">Order By Date</button>
-                        <button id="orderby_views_btn" class="btn btn-secondary col-3">Order By Views</button>
-                        <button id="orderby_likes_btn" class="btn btn-light col-3">Order By likes</button>
-                    </div>      
+                    <div id="orderby_div"  data-gameid="{{ game.id }}" class="ArticleOrderType row d-flex justify-content-center">   
+                        <button id="orderby_date_btn" class="btn btn-light col-3" type="button">Order By Date</button>
+                        <button id="orderby_views_btn" class="btn btn-light col-3 bg-primary text-light" type="button">Order By Views</button>
+                        <button id="orderby_likes_btn" class="btn btn-light col-3" type="button">Order By Likes</button>
+                    </div>
 
-                    {% include 'gamers_havn/article_list.html' %}
+                    <div id="article_list_div" class="mb-5">
+                        {% include 'gamers_havn/article_list.html' %}
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 {% endblock %}
+
+
+{% block js_block %}
+    <script src="{% static 'js/game.js' %}"></script>
+{% endblock js_block %}

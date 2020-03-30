@@ -1,5 +1,7 @@
 {% extends 'gamers_havn/base.html' %}
 {% load staticfiles %}
+{% load gamers_havn_template_tags %}
+
 
 {% block title_block %}
     Edit Article
@@ -7,6 +9,8 @@
 
 
 {% block css_block %}
+    <link rel="stylesheet" href="{% static 'css/edit_article.css' %}" rel="stylesheet">
+
     <!-- css for markdown editor -->
     <link rel="stylesheet" href="http://lab.lepture.com/editor/editor.css" />
 {% endblock %}
@@ -17,18 +21,41 @@
         <h1 class="display-4">Create your article!</h1>
         <p class="lead">This is a markdown editor.</p>
         <hr class="">
+
+        <!-- Dropdown to change the game of the article -->
+        <div class="d-flex justify-content-evenly align-items-center">
+            <div> This is an article for: </div>
+            <div class="dropdown ml-2">
+                <a id="selected_game" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {% if article %}
+                    {{ article.game }}
+                {% elif game %}
+                    {{ game }}
+                {% else %}
+                    {{ games.first }}
+                {% endif %}
+                </a>
+                <div id="select_game_div" class="dropdown-menu">
+                {% for game in games %}
+                    <a class="dropdown-item" href="#">{{ game.title }}</a>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
         
+        <!-- Markdown Editor -->
         <div class="card p-4 border-0" id="editor">
             <div class="card py-2 border-0">
-                <input id="input_article_title" class="mx-2" type="text" placeholder="Title" maxlength="128">
+                <strong>Title</strong>
+                <input id="input_article_title" class="mx-2" type="text" placeholder="Title" maxlength="128" value="{{ article.title }}">
             </div>
 
             <div class="card py-2 border-0">
                 <small class="mx-2 text-secondary" >Use the markdown format to write your article gracefully</small>
-                <textarea></textarea>
+                <textarea value="{{ article.content|safe }}">{{ article.content|safe }}</textarea>
                 <div class="row justify-content-center mx-2">
                     <button id="exit_edit_btn" class="btn btn-light col-4 mx-4" data-url="{% url 'gamers_havn:index' %}">Exit Editor</button>
-                    <button id="post_article_btn" class="btn btn-light col-4 mx-4">Post Your Article</button>
+                    <button id="post_article_btn" class="btn btn-light col-4 mx-4" data-articleid="{%if article%}{{ article.id }}{%else%}-1{%endif%}">Post Your Article</button>
                 </div>  
             </div>
         </div>

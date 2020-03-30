@@ -27,5 +27,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('gamers_havn/', include('gamers_havn.urls')),
     path('', views.IndexView.as_view(), name='index'),
+    path('oauth/', include('social_django.urls', namespace='social')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

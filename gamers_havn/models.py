@@ -45,7 +45,6 @@ class Game(models.Model):
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
     follows = models.IntegerField(default=0)
     url = models.URLField()
-    tags = models.ManyToManyField('Tag', limit_choices_to={'is_game_tag': True})
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
@@ -66,7 +65,6 @@ class Article(models.Model):
     content = models.FileField(upload_to='articles')
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    tags = models.ManyToManyField('Tag')
     created_at = models.DateTimeField(default=timezone.now, editable=False)
     views = models.IntegerField(default=0)
     likes = models.IntegerField(default=0)
@@ -85,17 +83,6 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
-
-
-class Tag(models.Model):
-
-    TAG_MAX_LENGTH = 64
-
-    tag = models.CharField(max_length=TAG_MAX_LENGTH, unique=True)
-    is_game_tag = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.tag
 
 
 class Comment(models.Model):

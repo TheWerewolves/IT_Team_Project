@@ -1,9 +1,6 @@
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Games</a>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-    {% for game in games %}
-        <a class="dropdown-item" href="{% url 'gamers_havn:game' game.slug %}">{{ game.title }}</a>
-    {% endfor %}
-    </div>
-</li>
+
+<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+{% for game in games %}
+    <a class="dropdown-item" href="{% url 'gamers_havn:game' game.slug %}">{{ game.title }}</a>
+{% endfor %}
+</div>

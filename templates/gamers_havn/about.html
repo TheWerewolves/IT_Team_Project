@@ -2,13 +2,13 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    {{ game.title }}
+    About
 {% endblock %}
 
 
 {% block body_block %}
-    <div id="AboutJumb" class="jumbotron jumbotron-fluid">
-        <div class="container text-center">
+    <div class="jumbotron-fluid min-vh-100 text-white">
+        <div class="container text-center pt-5">
             <h1 class="display-4 font-weight-bold">About</h1>
             <br><br>
             <hr>
@@ -20,7 +20,7 @@
             <p>FANGYUAN BAO(2491710B)<br></p>
             <br><br>
             <p class="font-weight-bold">The source code of this website is on : </p>
-            <p>www.google.com</p>
+            <a class="text-muted" href="https://github.com/TheWerewolves/IT_Team_Project/tree/master">https://github.com/TheWerewolves/IT_Team_Project/tree/master</a>
         </div>
     </div>
 {% endblock %}

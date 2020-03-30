@@ -1,0 +1,19 @@
+
+#editor{
+    height: 100%;
+    width: 100%;
+    margin: 10px auto;
+    border: lightcyan 1px solid ;
+    
+}
+
+#editor input {
+    height: 50px;
+    line-height:50px;
+    margin-bottom: 10px;
+}
+
+#editor button {       
+    height: 50px;
+    border: 1px lightcyan inset;
+}

@@ -1,91 +1,47 @@
-
-.niceText{
-    color: white;
-    text-align: center;
-    text-decoration: none;
-}
-
-.MyTop li,button{
+/* Header */
+header li, header button {
     margin: 5px 5px 5px 0px;
 }
 
-.MyBottom{
-    background-color: red;
 
+/* Body */
+body {
+    background-image: url('/static/images/bg/bg_game_index.jpg');
 }
 
-.MyBottom{
+.card {
+    background-color: rgb(255, 255, 255);
+    padding-top: 10px;
+}
 
+.jumbotron {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: rgb(255, 255, 255);
+}
+
+
+/* Footer */
+footer {
     background-color: rgb(50, 50, 50);
 }
 
-.MyBottom a{
+footer a:hover{
+    background-color: gray;
+    text-decoration: none;
+}
 
+footer a {
     display: block;
     height: 50px;
     margin: 0px auto;
     line-height: 50px;
     text-align: center;
-}
-
-.MyBottom a:hover{
-    background-color: gray;
-    text-decoration: none;
     color: white;
 }
 
-.basePortrait{
-    width: 30px;
-    height: 30px;
-    padding: 0px;
-    margin: 0px;
-    border-radius:50%;
-};
-
-/* set the text of portrait to the center */
-.baseProtrait .basePortraitUserName{
-    font: 700 white 24px; 
-    line-height: 50px;
-}
 
 /* remove the small arrow on the dropdown for portrait */
-#portraitDropDown .dropdown-toggle::after {
+#portrait_dropdown .dropdown-toggle::after {
     display:none;
-}
-
-.card {
-    background-color: rgb(255, 255, 255);
-    padding-top: 20px;
-}
-
-.jumbotron {
-    border-radius: 0;
-    background-color: rgb(255, 255, 255);
-}
-
-#editor{
-    height: 100%;
-    width: 100%;
-    margin: 10px auto;
-    border: lightcyan 1px solid ;
-    
-}
-
-#editor input{
-    height: 50px;
-    line-height:50px;
-    margin-bottom: 10px;
-}
-
-#editor button{       
-    height: 50px;
-    border: 1px lightcyan inset;
-}
-
-#editor .dropdown-menu{
-    width: 90%;
-}
-
-body {
-    background-image: url('/static/images/bg/bg_game_index.jpg');
 }

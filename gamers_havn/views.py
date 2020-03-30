@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 
-from gamers_havn.models import Account, Game, Article, Tag, Comment
+from gamers_havn.models import Account, Game, Article, Comment
 from gamers_havn.forms import UserForm, UserProfileForm
 
 from uuid import uuid4
@@ -58,6 +58,47 @@ class ShowGameView(View):
         context_dict = self.create_context_dict(game_title_slug)
         return render(request, 'gamers_havn/game.html', context_dict)
     
+class FollowGameView(View):
+    def get(self, request):
+        game_id = request.GET['game_id']
+        button = request.GET['button']
+
+        try:
+            game = Game.objects.get(id=game_id)
+        except Game.DoesNotExist:
+            return HttpResponse(False)
+
+        account = get_current_account(request)
+
+        if button == 'Follow':
+            account.followed_games.add(game)
+        else:
+            account.followed_games.remove(game)
+
+        account.save()
+        game.save()
+
+        return HttpResponse(True)
+
+class GameListArticleView(View):
+    def get(self, request):
+        order_by = request.GET['orderby']
+        game_id = request.GET['game_id']
+
+        articles = None
+        try:
+            game = Game.objects.get(id=game_id)
+            if 'Views' in order_by:
+                articles = Article.objects.filter(game=game).order_by('-views')
+            elif 'Likes' in order_by:
+                articles = Article.objects.filter(game=game).order_by('-likes')
+            elif 'Date' in order_by:
+                articles = Article.objects.filter(game=game).order_by('-created_at')
+        except Game.DoesNotExist:
+            return None
+
+        return render(request, 'gamers_havn/article_list.html', {'articles': articles})
+
 class ShowArticleView(View):
     def get(self, request, article_title_slug):
         try:
@@ -75,6 +116,7 @@ class ShowArticleView(View):
 
         context_dict = {}
         context_dict['article'] = article
+        context_dict['game'] = article.game
         context_dict['comments'] = comments
         context_dict['is_liked'] = is_liked
 
@@ -106,11 +148,12 @@ class LikeArticleView(View):
 
         try:
             article = Article.objects.get(id=int(article_id))
-            account = get_current_account(request)
         except Article.DoesNotExist or Account.DoesNotExist:
             return HttpResponse(-1)
         except ValueError:
             return HttpResponse(-1)
+
+        account = get_current_account(request)
 
         if button == 'Like':
             account.favorite_articles.add(article)
@@ -147,9 +190,9 @@ class SignupView(View):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             user = User.objects.create_user(username, email, password)
-            account = Account(user=user)
+            account = Account.objects.create(user=user)
             login(request, user)
-            return redirect(reverse('gamers_havn:profile', kwargs={'username': user.username}))
+            return redirect(reverse('gamers_havn:index'))
 
         context_dict = {}
         context_dict['username'] = username
@@ -173,6 +216,16 @@ class LoginView(View):
         context_dict['username'] = username
         context_dict['password'] = password
         return render(request, 'gamers_havn/login.html', context_dict)
+
+class LoginWithSocialView(View):
+    def get(self, request):
+        user = request.user
+        account = Account.objects.get_or_create(user=user)
+
+        if not user.has_usable_password():
+            return redirect(reverse('gamers_havn:change_password', kwargs={'username': user.username}))
+        
+        return redirect(reverse('gamers_havn:index'))
 
 class LogoutView(View):
     @method_decorator(login_required)
@@ -315,15 +368,27 @@ class SearchView(View):
 class EditArticleView(View):
     @method_decorator(login_required)
     def get(self, request):
-
         context_dict = {}
+        games = Game.objects.all()
+        context_dict['games'] = games
+
+        if 'article_id' in request.GET:
+            article_id = request.GET['article_id']
+            article = Article.objects.get(id=int(article_id))
+            article.content = article.content.read().decode('ansi')
+            context_dict['article'] = article
+        elif 'game_id' in request.GET:
+            game_id = request.GET['game_id']
+            game = Game.objects.get(id=int(game_id))
+            context_dict['game'] = game
 
         return render(request, 'gamers_havn/edit_article.html', context_dict)
 
     @method_decorator(login_required)
     def post(self, request):
+        id = request.POST['id']
         title = request.POST['title']
-        game_title = 'Dark Souls'
+        game_title = request.POST['game_title']
         content = request.POST['content']
         content_file = ContentFile(content)
 
@@ -333,7 +398,10 @@ class EditArticleView(View):
         except Game.DoesNotExist or Account.DoesNotExist:
             return HttpResponse(reverse('gamers_havn:index'))
 
-        article = Article.objects.create(title=title, author=author, game=game)
+        article = Article.objects.get_or_create(id=id)[0]
+        article.title = title
+        article.author = author
+        article.game = game
         article.content.save(uuid4().hex, content_file)
 
         return HttpResponse(reverse('gamers_havn:article', kwargs={'article_title_slug': article.slug}))

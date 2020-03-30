@@ -19,20 +19,18 @@
 
         <!-- Custom CSS -->
         <link rel="stylesheet" href="{% static 'css/base.css' %}" rel="stylesheet">
-        <link rel="stylesheet" href="{% static 'css/about.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/index.css' %}" rel="stylesheet">
         <!-- <link rel="stylesheet" href="{% static 'css/login.css' %}" rel="stylesheet"> -->
         <link rel="stylesheet" href="{% static 'css/signup.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/article.css' %}" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'css/profile.css' %}" rel="stylesheet">
-
         {% block css_block %}{% endblock %}
     </head>
 
     <body>
         <!-- Header -->
         <header>
-            <nav  class="navbar navbar-expand-lg navbar-dark bg-dark MyTop">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark MyTop">
                 <a class="navbar-brand" href="{% url 'gamers_havn:index' %}">
                     <img src="{% static 'images/brand.png' %}" alt="" height="50px">
                 </a>
@@ -42,12 +40,17 @@
             
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        {% get_game_list %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Popular Games</a>
+                            {% get_game_list %}
+                        </li>
+                        
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link text-light" href="{% url 'gamers_havn:edit_article' %}">Create Article</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'gamers_havn:about' %}">About</a>
+                            <a class="nav-link text-light" href="{% url 'gamers_havn:about' %}">About</a>
                         </li>
                     </ul>
                     
@@ -57,16 +60,16 @@
                             <input id="search_input" class="form-control mr-sm-2" type="search" name="search_query" placeholder="Search" aria-label="Search">
                             <button id="search_btn" class="btn btn-secondary my-2 my-sm-0" type="submit">Search for</button>
                             <div class="dropdown">
-                            {% if games %}
-                                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">Games</button>
-                                <input type="hidden" value="Games" name="search_type">
-                            {% elif users %}
-                                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">User</button>
-                                <input type="hidden" value="User" name="search_type">
-                            {% else %}
-                                <button class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">Articles</button>
-                                <input type="hidden" value="Articles" name="search_type">
-                            {% endif %}
+                                <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {% if games %}
+                                    <input type="hidden" value="Games" name="search_type"><span>Games</span>
+                                {% elif users %}
+                                    <input type="hidden" value="User" name="search_type"><span>User</span>
+                                {% else %}
+                                    <input type="hidden" value="Articles" name="search_type"><span>Articles</span>
+                                {% endif %}
+                                </a>
+
                                 <div id="search_type_dropdown" class="dropdown-menu">
                                     <a class="dropdown-item" href="#">Articles</a>
                                     <a class="dropdown-item" href="#">Games</a>
@@ -76,13 +79,10 @@
                         </form>
 
                     {% if user.is_authenticated %}
-                        <li id="portraitDropDown" class="nav-item dropdown">
+                        <li id="portrait_dropdown" class="nav-item dropdown">
                             <button class="btn btn-secondary dropdown-toggle d-flex justify-content-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {% if current_account.portrait %}
-                                <img class="basePortrait" src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ user.username }}'s profile image">
-                            {% else %}
-                                <img class="basePortrait" src="{% static 'images/user_default.png' %}" alt="User portrait">
-                            {% endif %}
+                                <img class="user_portrait rounded-circle" src="{{ MEDIA_URL }}{{ current_account.portrait }}" alt="{{ user.username }}'s profile image" 
+                                     data-altsrc="{% static 'images/user_default.png' %}" height="30px" width="30px">
                             </button>
                             <div class="dropdown-menu dropdown-menu-right" >
                                 <h6 class="dropdown-header">Sign in as : <br><span class="font-weight-bold">{{ user.username }}</span> </h6>
@@ -113,7 +113,7 @@
             </div>
 
             <!-- FOOTER -->
-            <footer class="container-fluid MyBottom">
+            <footer class="container-fluid">
                 <div class="row">
                     <a href="{% url 'gamers_havn:index' %}" class="footerA col-3 niceText" >Home</a>
                     <a href="{% url 'gamers_havn:about' %}" class="footerA col-3 niceText">About</a>

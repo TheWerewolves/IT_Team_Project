@@ -2,19 +2,19 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    {{ game.title }}
+    Login
 {% endblock %}
 
 
 {% block body_block %}
-    <div id="LogFrame" class="niceText" >
+    <div id="LogFrame" class="text-align-center text-white" >
         <div class="container-fluid logDiv">
             <div class="row">
-                <div class="col-lg-6 col-sm-12 LogFrame " >
+                <div class="col-lg-6 col-sm-12 min-vh-100 bg-dark" >
                     <div class="row align-items-center h-100">
                         <div class="col-2"></div>
                         
-                        <form class="col-8" method="post" action=".">
+                        <form class="col-8 text-center" method="post" action=".">
                         {% csrf_token %}
 
                         {% if username %}
@@ -23,7 +23,7 @@
 
                             <br><br>
 
-                            <div class="form-group ">
+                            <div class="form-group">
                                 <label>User Name</label>
                                 <input type="text" name="username" class="form-control" id="exampleInputEmail1" placeholder="User Name" value="{{ username }}">
                             </div>
@@ -32,9 +32,12 @@
                                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" value="{{ password }}">
                             </div>
 
-                            <button type="submit" class="btn btn-secondary ">Log in</button>
+                            <button type="submit" class="btn btn-secondary w-50">Log in</button>
                             <br><br>
-                            <button type="submit" class="btn btn-primary " ><i data-feather="twitter"></i> Log in with Twitter </button>
+
+                            <a href="{% url 'social:begin' 'twitter' %}">
+                                <button type="button" class="btn btn-primary w-50" ><i data-feather="twitter"></i> Login with Twitter </button>
+                            </a>
                         </form>
                         
                         <div class="col-2"></div>

@@ -21,13 +21,6 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
-key = None
-with open('secret.key') as f:
-    key = f.read().strip()
-
-SECRET_KEY = key
-
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -45,6 +38,7 @@ INSTALLED_APPS = [
     'gamers_havn',
     'registration',
     'django_cleanup',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'IT_Team_Project.urls'
@@ -72,10 +67,18 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'gamers_havn.context_processors.base',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.twitter.TwitterOAuth',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 
 WSGI_APPLICATION = 'IT_Team_Project.wsgi.application'
 
@@ -149,14 +152,28 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 STATIC_URL = '/static/'
 
 
-# Registration
+# Login & Registration
 
 REGISTRATION_OPEN = True
 
 REGISTEATION_AUTO_LOGIN = True
 
-LOGIN_REDIRECT_URL = 'gamers_havn:index'
-
-# Login
+LOGIN_REDIRECT_URL = 'gamers_havn:login_with_social'
 
 LOGIN_URL = 'auth_login'
+
+
+# Keys and Tokens
+
+secret_key = None
+twitter_key = None
+with open('secret.key') as f:
+    secret_key = f.read().strip()
+with open('twitter.key') as f:
+    twitter_key = f.read().strip()
+
+SECRET_KEY = secret_key
+
+SOCIAL_AUTH_TWITTER_KEY = 'Q0vQRmGSABxWjjhodlVoYA3l1'
+
+SOCIAL_AUTH_TWITTER_SECRET = twitter_key
