@@ -50,6 +50,7 @@ class ShowGameView(View):
         return render(request, 'gamers_havn/game.html', context_dict)
 
 class FollowGameView(View):
+    @method_decorator(login_required)
     def get(self, request):
         game_id = request.GET['game_id']
         button = request.GET['button']
@@ -80,14 +81,15 @@ class GameListArticleView(View):
         articles = None
         try:
             game = Game.objects.get(id=game_id)
-            if 'Views' in order_by:
-                articles = Article.objects.filter(game=game).order_by('-views')
-            elif 'Likes' in order_by:
-                articles = Article.objects.filter(game=game).order_by('-likes')
-            elif 'Date' in order_by:
-                articles = Article.objects.filter(game=game).order_by('-created_at')
         except Game.DoesNotExist:
             return None
+
+        if 'Views' in order_by:
+            articles = Article.objects.filter(game=game).order_by('-views')
+        elif 'Likes' in order_by:
+            articles = Article.objects.filter(game=game).order_by('-likes')
+        elif 'Date' in order_by:
+            articles = Article.objects.filter(game=game).order_by('-created_at')
 
         return render(request, 'gamers_havn/article_list.html', {'articles': articles})
 
@@ -274,13 +276,15 @@ class ChangePasswordView(View):
         context_dict['user_profile'] = user_profile
 
         if not request.user.has_usable_password():
-            context_dict['change_pw_message'] = "You don't yet have a password, set it here in order to login next time!"
+            context_dict['change_pw_message'] = "You don't have a password yet, set it here to login next time!"
 
         return render(request, 'gamers_havn/change_password.html', context_dict)
 
     @method_decorator(login_required)
     def post(self, request, username):
-        old_password = request.POST['old_password']
+        old_password = ''
+        if 'old_password' in request.POST:
+            old_password = request.POST['old_password']
         new_password = request.POST['new_password']
         confirm_password = request.POST['confirm_password']
         try:

@@ -43,3 +43,8 @@
     text-align: center;
     
 }
+
+#article-content img {
+    width: 100%;
+    padding: 0 10px;
+}

@@ -160,7 +160,7 @@ REGISTEATION_AUTO_LOGIN = True
 
 LOGIN_REDIRECT_URL = 'gamers_havn:index'
 
-LOGIN_URL = 'auth_login'
+LOGIN_URL = 'gamers_havn:login'
 
 
 # Keys and Tokens

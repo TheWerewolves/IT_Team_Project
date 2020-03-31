@@ -25,25 +25,30 @@ body {
 
 .card, .jumbotron {
     background-color: rgb(105, 105, 120, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f000000,endColorstr=#7f000000);
     color: white;
 }
 
 .list-group-item {
     background-color: rgba(83, 83, 95, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f000000,endColorstr=#7f000000);
     color: white;
 }
 
 .list-group-item:hover {
     background-color: rgba(216, 216, 216, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f000000,endColorstr=#7f000000);
     color: black;
 }
 
 .bg-trans-grey {
     background-color: rgb(105, 105, 120, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f000000,endColorstr=#7f000000);
 }
 
 .bg-trans-light-grey {
     background-color: rgba(199, 199, 214, 0.8);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f000000,endColorstr=#7f000000);
 }
 
 /* Footer */

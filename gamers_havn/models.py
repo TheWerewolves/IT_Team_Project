@@ -1,6 +1,5 @@
 import os
 
-from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -29,7 +28,7 @@ class Account(models.Model):
     # Include id, name, e-mail, user permission and much more
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    age = models.IntegerField(default=0)
+    age = models.PositiveIntegerField(default=0)
     portrait = models.ImageField(upload_to=PathAndRename('profile_images'), blank=True)
     favorite_articles = models.ManyToManyField('Article', blank=True)
     followed_games = models.ManyToManyField('Game', blank=True)
@@ -43,13 +42,14 @@ class Game(models.Model):
     TITLE_MAX_LENGTH = 128
 
     title = models.CharField(max_length=TITLE_MAX_LENGTH, unique=True)
-    follows = models.IntegerField(default=0)
+    follows = models.PositiveIntegerField(default=0)
     url = models.URLField()
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
         self.slug =  slugify(self.title)
-        self.follows = self.account_set.count()
+        if self.id:
+            self.follows = self.account_set.count()
         super(Game, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -66,8 +66,8 @@ class Article(models.Model):
     author = models.ForeignKey(Account, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
-    views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
+    likes = models.PositiveIntegerField(default=0)
     slug = models.SlugField(unique=True)
 
     def save(self, *args, **kwargs):
