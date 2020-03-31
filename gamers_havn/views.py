@@ -10,14 +10,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from django.urls import reverse
-from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views import View
 
 from gamers_havn.models import Account, Game, Article, Comment
 from gamers_havn.forms import UserForm, UserProfileForm
-
-from uuid import uuid4
 
 
 class IndexView(View):
@@ -29,16 +26,11 @@ class IndexView(View):
         context_dict['popular_games'] = game_list
         context_dict['popular_articles'] = article_list
 
-        visitor_cookie_handler(request)
-
         return render(request, 'gamers_havn/index.html', context_dict)
 
 class AboutView(View):
     def get(self, request):
-        context_dict = {}
-        visitor_cookie_handler(request)
-        context_dict['visits'] = int(request.session['visits'])
-        return render(request, 'gamers_havn/about.html', context_dict)
+        return render(request, 'gamers_havn/about.html')
 
 class ShowGameView(View):
     def create_context_dict(self, game_title_slug):
@@ -56,7 +48,7 @@ class ShowGameView(View):
     def get(self, request, game_title_slug):
         context_dict = self.create_context_dict(game_title_slug)
         return render(request, 'gamers_havn/game.html', context_dict)
-    
+
 class FollowGameView(View):
     def get(self, request):
         game_id = request.GET['game_id']
@@ -79,6 +71,7 @@ class FollowGameView(View):
 
         return HttpResponse(True)
 
+# Called when user hit order by button to request different ordered articles of a game
 class GameListArticleView(View):
     def get(self, request):
         order_by = request.GET['orderby']
@@ -162,6 +155,7 @@ class LikeArticleView(View):
 
         return HttpResponse(article.likes)
 
+# Called when a user request to view an article
 class GotoArticleView(View):
     def get(self, request):
         article_id = request.GET.get('article_id')
@@ -189,7 +183,7 @@ class SignupView(View):
         except User.DoesNotExist:
             user = User.objects.create_user(username, email, password)
             account = Account.objects.create(user=user)
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect(reverse('gamers_havn:index'))
 
         context_dict = {}
@@ -207,7 +201,7 @@ class LoginView(View):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect(reverse('gamers_havn:index'))
         
         context_dict = {}
@@ -246,7 +240,7 @@ class ProfileView(View):
         username = request.POST['username']
         email = request.POST['email']
         age = request.POST['age']
-        portrait = request.FILES['portrait']
+        portrait = request.FILES.get('portrait', None)
 
         try:
             user_profile = get_user_details(username)
@@ -261,6 +255,8 @@ class ProfileView(View):
                 user_profile.age = age
             if portrait:
                 user_profile.portrait = portrait
+
+            user_profile.user.save()
             user_profile.save()
             return redirect(reverse('gamers_havn:profile', kwargs={'username': username}))
 
@@ -298,7 +294,7 @@ class ChangePasswordView(View):
             if new_password == confirm_password:
                 user.password = make_password(new_password)
                 user.save()
-                login(user, request)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return redirect(reverse('gamers_havn:index'))
             else:
                 change_pw_message = 'The confirmation did not match, Please try again.'
@@ -400,33 +396,21 @@ class EditArticleView(View):
         except Game.DoesNotExist or Account.DoesNotExist:
             return HttpResponse(reverse('gamers_havn:index'))
 
-        article = Article.objects.get_or_create(id=id)[0]
-        article.title = title
-        article.author = author
-        article.game = game
-        article.content = content
+        try:
+            article = Article.objects.get(id=id)
+            article.title = title
+            article.author = author
+            article.game = game
+            article.content = content
+        except Article.DoesNotExist:
+            article = Article.objects.create(title=title, author=author, game=game, content=content)
+        
         article.save()
 
         return HttpResponse(reverse('gamers_havn:article', kwargs={'article_title_slug': article.slug}))
 
 
 # Helper functions
-def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie(request, 'visits', '1'))
-    last_visit_cookie = get_server_side_cookie(request, 
-                                               'last_visit', 
-                                               str(datetime.now()))
-    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-                                        '%Y-%m-%d %H:%M:%S')
-    
-    if (datetime.now() - last_visit_time).days > 0:
-        visits += 1
-        request.session['last_visit'] = str(datetime.now())
-    else:
-        request.session['last_visit'] = last_visit_cookie
-
-    request.session['visits'] = visits
-
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
     if not val:
@@ -477,5 +461,7 @@ def get_user_details(username):
     return user_profile
 
 def get_current_account(request):
-    account = Account.objects.get_or_create(user=request.user)[0]
+    account = None
+    if request.user.is_authenticated:
+        account = Account.objects.get_or_create(user=request.user)[0]
     return account

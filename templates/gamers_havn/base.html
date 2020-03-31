@@ -40,10 +40,11 @@
                                 Popular Games</a>
                             {% get_game_list %}
                         </li>
-                        
+                        {% if user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link text-light" href="{% url 'gamers_havn:edit_article' %}">Create Article</a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link text-light" href="{% url 'gamers_havn:about' %}">About</a>
                         </li>
