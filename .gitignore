@@ -1,6 +1,7 @@
 # New
 db.sqlite3
 *.key
+media/
 
 
 # Byte-compiled / optimized / DLL files
